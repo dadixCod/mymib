@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mymib/design/screens/authentication_screen.dart';
-import 'package:mymib/design/screens/home_screen.dart';
-import 'package:mymib/design/screens/login_screen.dart';
-import 'package:mymib/design/screens/on_boarding_screen.dart';
-import 'package:mymib/design/screens/person_type_screen.dart';
-import 'package:mymib/design/screens/sign_up_screen.dart';
+import 'package:mymib/presentation/screens/authentication_screen.dart';
+import 'package:mymib/presentation/screens/home_screen.dart';
+import 'package:mymib/presentation/screens/login_screen.dart';
+import 'package:mymib/presentation/screens/on_boarding_screen.dart';
+import 'package:mymib/presentation/screens/person_type_screen.dart';
+import 'package:mymib/presentation/screens/sign_up_screen.dart';
 
 class AppRouter {
   Route onGenerateRoute(RouteSettings settings) {

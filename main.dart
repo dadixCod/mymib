@@ -4,9 +4,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mymib/core/router/app_router.dart';
 import 'package:mymib/core/utils/extensions.dart';
-import 'package:mymib/design/screens/authentication_screen.dart';
+import 'package:mymib/logic/blocs/user_bloc/user_bloc.dart';
+import 'package:mymib/presentation/screens/authentication_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mymib/design/screens/on_boarding_screen.dart';
+import 'package:mymib/presentation/screens/on_boarding_screen.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_bloc.dart';
 
 import 'core/theme/app_theme.dart';
@@ -35,6 +36,9 @@ class MainApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => AuthBloc(),
+        ),
+        BlocProvider(
+          create: (context) => UserBloc(),
         ),
       ],
       child: MaterialApp(

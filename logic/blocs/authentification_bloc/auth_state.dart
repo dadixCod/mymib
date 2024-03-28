@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mymib/data/models/user_model.dart';
 
 abstract class AuthState {
@@ -16,6 +17,12 @@ class AuthLoadingState extends AuthState {
 class AuthSuccessState extends AuthState {
   final UserModel user;
   const AuthSuccessState(this.user);
+  @override
+  List<Object> get props => [user];
+}
+class AuthSuccessSignUpState extends AuthState {
+  final User user;
+  const AuthSuccessSignUpState(this.user);
   @override
   List<Object> get props => [user];
 }

@@ -4,28 +4,27 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
-import 'package:mymib/design/widgets/widgets.dart';
+import 'package:mymib/logic/services/authentication_service.dart';
+import 'package:mymib/presentation/widgets/widgets.dart';
 import 'package:mymib/generated/l10n.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_bloc.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_event.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_state.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<LoginScreen> createState() => _LoginScreeState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  late TextEditingController usernameController;
+class _LoginScreeState extends State<LoginScreen> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   GlobalKey<FormState> key = GlobalKey<FormState>();
   var isLoading = false;
   @override
   void initState() {
-    usernameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
     super.initState();
@@ -36,7 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final autoTexts = S.of(context);
     final size = context.deviceSize;
     Constants constants = Constants(deviseSize: size);
-
+    AuthenticationService authService = AuthenticationService();
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -45,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipPath(
-                clipper: WaveClipperTwo(flip: true),
+                clipper: WaveClipperTwo(),
                 child: Container(
                   color: context.colorScheme.primaryContainer,
                   height: 200,
@@ -66,7 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      autoTexts.createAccount,
+                      autoTexts.welcomeAgain,
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
@@ -79,53 +78,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       autoTexts.signupDesc,
                     ),
                     SizedBox(height: constants.tenVertical * 4.5),
-                    // 3 text fields
-                    RoundedTextField(
-                      text: autoTexts.username.replaceFirst("'", ""),
-                      controller: usernameController,
-                      validator: (value) {
-                        if (value!.isEmpty || value.length < 6) {
-                          return autoTexts.invalidUsername;
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: constants.tenVertical * 1.5),
+                    // 2 text fields
                     RoundedTextField(
                       text: autoTexts.email,
                       controller: emailController,
-                      validator: (value) {
-                        // RegExp regExp = RegExp(
-                        //     r"/^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/");
-                        if (value!.isEmpty || !value.contains('@')) {
-                          return autoTexts.emptyEmail;
-                        }
-                        // else if (!regExp.hasMatch(value)) {
-                        //   return autoTexts.invalidEmail;
-                        // }
-                        return null;
-                      },
                     ),
                     SizedBox(height: constants.tenVertical * 1.5),
                     RoundedTextField(
-                      obscure: true,
                       text: autoTexts.password,
                       controller: passwordController,
-                      validator: (value) {
-                        if (value!.isEmpty || value.length < 8) {
-                          return autoTexts.invalidPassword;
-                        }
-                        return null;
-                      },
+                      obscure: true,
                     ),
-                    SizedBox(height: constants.tenVertical * 3),
+                    SizedBox(height: constants.tenVertical * 5),
 
                     //Sign up button
                     BlocConsumer<AuthBloc, AuthState>(
                       listener: (context, state) {
                         if (state is AuthSuccessState) {
                           Navigator.of(context).pushReplacementNamed('/home');
-                          
                         }
                         if (state is AuthLoadingState) {
                           isLoading = state.isLoading;
@@ -139,48 +109,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               });
                         }
                       },
-                      builder: (context, state) {
-                        return RoundedActionButton(
-                          onTap: () {
-                            if (key.currentState!.validate()) {
-                              context.read<AuthBloc>().add(
-                                    SignUpUser(
-                                      email: emailController.text,
-                                      password: passwordController.text,
-                                      displayName: usernameController.text,
-                                    ),
-                                  );
-                            }
-                          },
-                          child: isLoading
-                              ? SpinKitFadingCircle(
-                                  color: context.colorScheme.background,
-                                )
-                              : Text(
-                                  autoTexts.signup.replaceFirst("'", ""),
-                                  style: context.textTheme.titleLarge?.copyWith(
-                                    color: context.colorScheme.background,
-                                    fontWeight: FontWeight.w500,
+                      builder: (context, state) => RoundedActionButton(
+                        onTap: () {
+                          if (key.currentState!.validate()) {
+                            context.read<AuthBloc>().add(
+                                  LoginUser(
+                                    email: emailController.text,
+                                    password: passwordController.text,
                                   ),
+                                );
+                          }
+                        },
+                        child: isLoading
+                            ? SpinKitFadingCircle(
+                                color: context.colorScheme.background,
+                              )
+                            : Text(
+                                autoTexts.login,
+                                style: context.textTheme.titleLarge?.copyWith(
+                                  color: context.colorScheme.background,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                        );
-                      },
+                              ),
+                      ),
                     ),
-                    SizedBox(height: constants.tenVertical),
+                    SizedBox(height: constants.tenVertical * 2),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          autoTexts.didHaveAccount,
+                          autoTexts.didNotHaveAccount.replaceFirst("'", ""),
                           style: context.textTheme.bodyLarge,
                         ),
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context)
-                                .pushReplacementNamed('/log_in');
+                                .pushReplacementNamed('/sign_up');
                           },
                           child: Text(
-                            autoTexts.login,
+                            autoTexts.signup.replaceFirst("'", ""),
                             style: context.textTheme.titleMedium?.copyWith(
                               decoration: TextDecoration.underline,
                             ),
@@ -188,7 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: constants.tenVertical * 2),
+                    SizedBox(height: constants.tenVertical * 5),
                     Row(
                       children: [
                         const Expanded(child: Divider()),
@@ -201,6 +168,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: constants.tenVertical),
                     GestureDetector(
+                      onTap: () async {
+                        final bool userExists =
+                            await authService.signInWithGoogle();
+                        if (userExists) {
+                          // User exists, navigate to HomeScreen
+                          Navigator.of(context).pushReplacementNamed('/home');
+                        } else {
+                          // User does not exist, navigate to TypeSelectionScreen
+                          Navigator.of(context)
+                              .pushReplacementNamed('/person_type');
+                        }
+                      },
                       child: const MediaCircleAvatar(
                         imagePath: 'assets/icons/google.png',
                       ),

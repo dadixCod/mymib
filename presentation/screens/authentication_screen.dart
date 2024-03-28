@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mymib/core/utils/extensions.dart';
-import 'package:mymib/design/screens/home_screen.dart';
-import 'package:mymib/design/screens/login_screen.dart';
+import 'package:mymib/data/models/user_model.dart';
+import 'package:mymib/presentation/screens/home_screen.dart';
+import 'package:mymib/presentation/screens/login_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mymib/presentation/screens/person_type_screen.dart';
 
 class AuthenticationScreen extends StatelessWidget {
   const AuthenticationScreen({super.key});
@@ -22,7 +24,12 @@ class AuthenticationScreen extends StatelessWidget {
               ),
             );
           } else if (snapshot.hasData) {
-            return const HomeScreen();
+            if (snapshot.data is UserModel) {
+              return const HomeScreen();
+            } else {
+              // User needs to choose their type, navigate to type selection screen
+              return const PersonTypeScreen();
+            }
           } else {
             return const LoginScreen();
           }

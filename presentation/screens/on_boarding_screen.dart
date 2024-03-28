@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
 import 'package:mymib/data/models/on_boarding.dart';
-import 'package:mymib/design/widgets/rounded_button.dart';
+import 'package:mymib/presentation/widgets/rounded_button.dart';
 import 'package:mymib/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
