@@ -29,7 +29,7 @@ class AuthenticationService {
     return null;
   }
 
-  Future<void> storeUserToFirestore(final String type) async {
+  Future<bool> storeUserToFirestore(final String type) async {
     final User? user = auth.currentUser;
     CollectionReference users = firestore.collection('users');
     try {
@@ -39,7 +39,10 @@ class AuthenticationService {
           'email': user.email,
           'type': type,
         });
+        return true;
       }
+      return false;
+    
     } on FirebaseException catch (e) {
       rethrow;
     } catch (e) {
@@ -100,7 +103,6 @@ class AuthenticationService {
         final userExists = await checkUserExists(userCredential.user!);
         return userExists;
       }
-      
     } catch (e) {
       rethrow;
     }

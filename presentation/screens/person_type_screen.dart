@@ -27,6 +27,7 @@ class _PersonTypeScreenState extends State<PersonTypeScreen> {
     return Scaffold(
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               autoTexts.youAre,
@@ -111,7 +112,7 @@ class _PersonTypeScreenState extends State<PersonTypeScreen> {
             BlocConsumer<AuthBloc, AuthState>(
               listener: (context, state) {
                 if (state is AuthSuccessState) {
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  Navigator.of(context).pushReplacementNamed('/main_screen');
                 }
                 if (state is AuthLoadingState) {
                   isLoading = state.isLoading;
@@ -131,11 +132,11 @@ class _PersonTypeScreenState extends State<PersonTypeScreen> {
                     if (isIndividual) {
                       context
                           .read<AuthBloc>()
-                          .add( StoreUser(user , type: 'individual'));
+                          .add(StoreUser(user, type: 'individual'));
                     } else {
                       context
                           .read<AuthBloc>()
-                          .add( StoreUser(user,type: 'company'));
+                          .add(StoreUser(user, type: 'company'));
                     }
                   },
                   child: isLoading

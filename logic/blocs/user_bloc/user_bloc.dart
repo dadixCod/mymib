@@ -15,7 +15,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         if (user != null) {
           emit(UserLoaded(user));
         } else {
-          emit(FailedUserLoading("User data is null"));
+          emit(const FailedUserLoading("User data is null"));
         }
       } catch (e) {
         emit(FailedUserLoading(e.toString()));

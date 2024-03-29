@@ -1,10 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
-import 'package:mymib/logic/services/authentication_service.dart';
 import 'package:mymib/presentation/widgets/widgets.dart';
 import 'package:mymib/generated/l10n.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_bloc.dart';
@@ -35,7 +36,6 @@ class _LoginScreeState extends State<LoginScreen> {
     final autoTexts = S.of(context);
     final size = context.deviceSize;
     Constants constants = Constants(deviseSize: size);
-    AuthenticationService authService = AuthenticationService();
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -82,20 +82,34 @@ class _LoginScreeState extends State<LoginScreen> {
                     RoundedTextField(
                       text: autoTexts.email,
                       controller: emailController,
+                      validator: (value) {
+                        if (value!.isEmpty || !value.contains('@')) {
+                          return autoTexts.emptyEmail;
+                        }
+
+                        return null;
+                      },
                     ),
                     SizedBox(height: constants.tenVertical * 1.5),
                     RoundedTextField(
                       text: autoTexts.password,
                       controller: passwordController,
                       obscure: true,
+                      validator: (value) {
+                        if (value!.isEmpty || value.length < 8) {
+                          return autoTexts.invalidPassword;
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: constants.tenVertical * 5),
 
-                    //Sign up button
+                    //Log in button
                     BlocConsumer<AuthBloc, AuthState>(
                       listener: (context, state) {
                         if (state is AuthSuccessState) {
-                          Navigator.of(context).pushReplacementNamed('/home');
+                          Navigator.of(context)
+                              .pushReplacementNamed('/main_screen');
                         }
                         if (state is AuthLoadingState) {
                           isLoading = state.isLoading;
@@ -167,22 +181,26 @@ class _LoginScreeState extends State<LoginScreen> {
                       ],
                     ),
                     SizedBox(height: constants.tenVertical),
-                    GestureDetector(
-                      onTap: () async {
-                        final bool userExists =
-                            await authService.signInWithGoogle();
-                        if (userExists) {
-                          // User exists, navigate to HomeScreen
-                          Navigator.of(context).pushReplacementNamed('/home');
-                        } else {
-                          // User does not exist, navigate to TypeSelectionScreen
+                    BlocConsumer<AuthBloc, AuthState>(
+                      listener: (context, state) {
+                        if (state is AuthSuccessState) {
+                          Navigator.of(context)
+                              .pushReplacementNamed('/main_screen');
+                        } else if (state is AuthFailureState) {
                           Navigator.of(context)
                               .pushReplacementNamed('/person_type');
                         }
                       },
-                      child: const MediaCircleAvatar(
-                        imagePath: 'assets/icons/google.png',
-                      ),
+                      builder: (context, state) {
+                        return GestureDetector(
+                          onTap: () async {
+                            context.read<AuthBloc>().add(SignInWithGoogle());
+                          },
+                          child: const MediaCircleAvatar(
+                            imagePath: 'assets/icons/google.png',
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

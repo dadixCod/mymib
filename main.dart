@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mymib/core/router/app_router.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:mymib/logic/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:mymib/logic/blocs/user_bloc/user_bloc.dart';
 import 'package:mymib/presentation/screens/authentication_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,6 +40,9 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => UserBloc(),
+        ),
+        BlocProvider(
+          create: (context) => NavigationBloc(),
         ),
       ],
       child: MaterialApp(

@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_event.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_state.dart';
@@ -18,6 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             event.displayName,
           );
           if (user != null) {
+            // emit(const AuthSuccessState());
             emit(AuthSuccessSignUpState(user));
           }
           emit(const AuthLoadingState(isLoading: false));
@@ -34,10 +34,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (event, emit) async {
         emit(const AuthLoadingState(isLoading: true));
         try {
-          await authService.storeUserToFirestore(event.type);
-          final user = await authService.getUsersData();
-          if (user != null) {
-            emit(AuthSuccessState(user));
+          final userStored = await authService.storeUserToFirestore(event.type);
+          if (userStored) {
+            emit(const AuthSuccessState());
           }
           emit(const AuthLoadingState(isLoading: true));
         } on FirebaseException catch (e) {
@@ -58,7 +57,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             event.password,
           );
           if (user != null) {
-            emit(AuthSuccessSignUpState(user));
+            emit(const AuthSuccessState());
           }
           emit(const AuthLoadingState(isLoading: false));
         } on FirebaseException catch (e) {
@@ -70,25 +69,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
     );
-    //Still to implement another logic
-    // on<SignInWithGoogle>(
-    //   (event, emit) async {
-    //     emit(const AuthLoadingState(isLoading: true));
-    //     try {
-    //       final UserModel? user = await authService.signInWithGoogle();
-    //       if (user != null) {
-    //         emit(AuthSuccessState(user));
-    //       }
-    //       emit(const AuthLoadingState(isLoading: false));
-    //     } on FirebaseAuthException catch (e) {
-    //       emit(AuthFailureState(e.toString()));
-    //       emit(const AuthLoadingState(isLoading: false));
-    //     } catch (e) {
-    //       emit(AuthFailureState(e.toString()));
-    //       emit(const AuthLoadingState(isLoading: false));
-    //     }
-    //   },
-    // );
+    on<SignInWithGoogle>(
+      (event, emit) async {
+        emit(const AuthLoadingState(isLoading: true));
+        try {
+          final bool userExists = await authService.signInWithGoogle();
+          if (userExists) {
+            emit(const AuthSuccessState());
+          } else {
+            emit(const AuthFailureState("User not found"));
+          }
+          emit(const AuthLoadingState(isLoading: false));
+        } on FirebaseAuthException catch (e) {
+          emit(AuthFailureState(e.toString()));
+          emit(const AuthLoadingState(isLoading: false));
+        } catch (e) {
+          emit(AuthFailureState(e.toString()));
+          emit(const AuthLoadingState(isLoading: false));
+        }
+      },
+    );
     on<SignOut>(
       (event, emit) async {
         emit(const AuthLoadingState(isLoading: true));
