@@ -1,7 +1,20 @@
+// ignore_for_file: unused_local_variable
+
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:mymib/data/models/category.dart';
+import 'package:mymib/presentation/widgets/custom_segmented_button.dart';
+import 'package:mymib/presentation/widgets/fancy_rounded_button.dart';
+import 'package:mymib/presentation/widgets/inputs_form.dart';
+// import 'package:mymib/data/models/category.dart';
+
+import '../../logic/blocs/categories_bloc.dart/bloc/category_bloc.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
@@ -11,24 +24,42 @@ class AddExpenseScreen extends StatefulWidget {
 }
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
+  var date = DateTime.now();
+
   late PageController pageController;
   late GlobalKey<FormState> revenuesKey;
   late GlobalKey<FormState> expensesKey;
-
+  var currentRevIndex = 0;
+  var currentExpIndex = 0;
   late TextEditingController dateController;
   late TextEditingController revenuesCategoryController;
   late TextEditingController revenuesAmountController;
   late TextEditingController revenuesNoteController;
-
+  late TextEditingController expensesCategoryController;
+  late TextEditingController expensesAmountController;
+  late TextEditingController expensesNoteController;
+  late String selectedRevCategory;
+  late String selectedExpCategory;
   @override
   void initState() {
     pageController = PageController(initialPage: sliderIndex);
     dateController = TextEditingController();
+    expensesCategoryController = TextEditingController();
+    expensesAmountController = TextEditingController();
+    expensesNoteController = TextEditingController();
     revenuesCategoryController = TextEditingController();
     revenuesAmountController = TextEditingController();
     revenuesNoteController = TextEditingController();
+    var formattedDate = DateFormat.yMd().format(date);
+    dateController.text = formattedDate;
     revenuesKey = GlobalKey<FormState>();
     expensesKey = GlobalKey<FormState>();
+    selectedRevCategory =
+        context.read<CategoryBloc>().state.revenueCategories[0].category;
+    revenuesCategoryController.text = selectedRevCategory;
+    selectedExpCategory =
+        context.read<CategoryBloc>().state.expensesCategories[0].category;
+    expensesCategoryController.text = selectedExpCategory;
     super.initState();
   }
 
@@ -46,6 +77,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     final size = context.deviceSize;
+    Constants constants = Constants(deviseSize: size);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -115,142 +147,147 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               },
             ),
           ),
-          SizedBox(
-            height: size.height * 0.6,
-            width: size.width * 0.9,
-            child: PageView(
-              controller: pageController,
-              children: [
-                RevenuesForm(
-                  formKey: revenuesKey,
-                  dateController: dateController,
-                  category: revenuesCategoryController,
-                  amount: revenuesAmountController,
-                  note: revenuesNoteController,
-                ),
-                RevenuesForm(
-                  formKey: expensesKey,
-                  dateController: dateController,
-                  category: revenuesCategoryController,
-                  amount: revenuesAmountController,
-                  note: revenuesNoteController,
-                ),
-              ],
-            ),
-          ),
+          BlocBuilder<CategoryBloc, CategoryState>(builder: (context, state) {
+            return SizedBox(
+              height: size.height * 0.52,
+              width: size.width * 0.9,
+              child: PageView(
+                controller: pageController,
+                children: [
+                  //revenues
+
+                  InputsForm(
+                    formKey: revenuesKey,
+                    dateController: dateController,
+                    category: revenuesCategoryController,
+                    selectCategory: () {
+                      chooseCategorySheet(
+                        context,
+                        size,
+                        state.revenueCategories,
+                        revenuesCategoryController,
+                        currentRevIndex,
+                        selectedRevCategory,
+                        true,
+                      );
+                    },
+                    amount: revenuesAmountController,
+                    note: revenuesNoteController,
+                  ),
+
+                  InputsForm(
+                    formKey: expensesKey,
+                    dateController: dateController,
+                    category: expensesCategoryController,
+                    selectCategory: () {
+                      chooseCategorySheet(
+                        context,
+                        size,
+                        state.expensesCategories,
+                        expensesCategoryController,
+                        currentExpIndex,
+                        selectedExpCategory,
+                        false,
+                      );
+                    },
+                    amount: expensesAmountController,
+                    note: expensesNoteController,
+                  ),
+                ],
+              ),
+            );
+          }),
+          FancyRoundedButton(
+            onTap: () {
+              double? revAmount;
+              double? expAmount;
+              if ((revenuesAmountController.text.isEmpty &&
+                      expensesAmountController.text.isNotEmpty) ||
+                  (revenuesAmountController.text.isNotEmpty &&
+                      expensesAmountController.text.isEmpty)) {
+                if (revenuesAmountController.text.isNotEmpty) {
+                  revAmount = double.tryParse(revenuesAmountController.text);
+                }
+                if (expensesAmountController.text.isNotEmpty) {
+                  expAmount = double.tryParse(revenuesAmountController.text);
+                }
+              }
+            },
+            text: 'Enregistrer',
+            color: Colors.blueAccent,
+          )
         ],
       ),
     );
   }
-}
 
-class RevenuesForm extends StatelessWidget {
-  final GlobalKey<FormState> formKey;
-  final TextEditingController dateController;
-  final TextEditingController category;
-  final TextEditingController amount;
-  final TextEditingController note;
-  const RevenuesForm(
-      {super.key,
-      required this.formKey,
-      required this.dateController,
-      required this.category,
-      required this.amount,
-      required this.note});
-
-  @override
-  Widget build(BuildContext context) {
-    final size = context.deviceSize;
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          RowTextField(
-            text: 'Date',
-            controller: dateController,
-            suffix: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.calendar_month),
-            ),
-          ),
-          RowTextField(
-            text: 'Montant',
-            controller: amount,
-            suffix: const SizedBox(),
-          ),
-          RowTextField(
-            text: 'Categorie',
-            controller: category,
-            suffix: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.filter_list,
-              ),
-            ),
-          ),
-          RowTextField(
-            text: 'Note',
-            controller: note,
-            suffix: const SizedBox(),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class RowTextField extends StatelessWidget {
-  const RowTextField({
-    super.key,
-    required this.controller,
-    required this.text,
-    required this.suffix,
-  });
-  final String text;
-  final Widget suffix;
-  final TextEditingController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    final size = context.deviceSize;
-    return SizedBox(
-      height: size.height * 0.1,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: size.width * 0.17,
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: context.colorScheme.outline,
-              ),
-            ),
-          ),
-          SizedBox(width: size.width * 0.05),
-          Container(
-            width: size.width * 0.6,
-            margin: const EdgeInsets.only(bottom: 10),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: context.colorScheme.outline.withOpacity(0.5),
+  Future<dynamic> chooseCategorySheet(
+    BuildContext context,
+    Size size,
+    List<Category> list,
+    TextEditingController controller,
+    int widgetIndex,
+    String selectedCategory,
+    bool isRev,
+  ) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (ctx) {
+        return Container(
+          height: size.height * 0.5,
+          width: size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    '/edit_categories',
+                    arguments: isRev,
+                  );
+                },
+                child: Container(
+                  width: size.width * 0.3,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  decoration: BoxDecoration(
+                    color: context.colorScheme.background,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(
+                        Icons.edit_rounded,
+                        size: 22,
+                      ),
+                      Text(
+                        "Editer",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            child: TextFormField(
-              controller: controller,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                suffix: suffix,
-                contentPadding: EdgeInsets.zero,
-              ),
-            ),
+              CustomSegmentedButton(
+                items: list,
+                selectedIndex: widgetIndex, // Provide the selectedIndex
+                onSelectionChanged: (index) {
+                  selectedCategory = list[index].category;
+                  setState(() {
+                    controller.text = selectedCategory;
+                  });
+                  widgetIndex = index; // Update the currentIndex
+                },
+              )
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

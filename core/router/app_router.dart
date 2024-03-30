@@ -1,14 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mymib/presentation/screens/add_expense_screen.dart';
-import 'package:mymib/presentation/screens/authentication_screen.dart';
-import 'package:mymib/presentation/screens/home_screen.dart';
-import 'package:mymib/presentation/screens/login_screen.dart';
-import 'package:mymib/presentation/screens/main_screen.dart';
-import 'package:mymib/presentation/screens/on_boarding_screen.dart';
-import 'package:mymib/presentation/screens/person_type_screen.dart';
-import 'package:mymib/presentation/screens/profile_screen.dart';
-import 'package:mymib/presentation/screens/sign_up_screen.dart';
-import 'package:mymib/presentation/screens/statistics_screen.dart';
+import '../../presentation/screens/screens.dart';
 
 class AppRouter {
   Route onGenerateRoute(RouteSettings settings) {
@@ -34,7 +25,12 @@ class AppRouter {
 
       case '/add':
         return MaterialPageRoute(builder: (_) => const AddExpenseScreen());
-
+      case '/edit_categories':
+        {
+          final fromRevenue = settings.arguments as bool;
+          return MaterialPageRoute(
+              builder: (_) =>  EditCategoriesScreen(fromRevenues: fromRevenue,));
+        }
       case '/profile':
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
 

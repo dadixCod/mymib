@@ -4,13 +4,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mymib/core/router/app_router.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:mymib/logic/blocs/categories_bloc.dart/bloc/category_bloc.dart';
 import 'package:mymib/logic/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:mymib/logic/blocs/user_bloc/user_bloc.dart';
-import 'package:mymib/presentation/screens/authentication_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mymib/presentation/screens/on_boarding_screen.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_bloc.dart';
-
+import '../../presentation/screens/screens.dart';
 import 'core/theme/app_theme.dart';
 import 'generated/l10n.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,6 +43,9 @@ class MainApp extends StatelessWidget {
         BlocProvider(
           create: (context) => NavigationBloc(),
         ),
+        BlocProvider(
+          create: (context) => CategoryBloc(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:intl/intl.dart';
 import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
 import 'package:mymib/generated/l10n.dart';
+import 'package:mymib/logic/blocs/categories_bloc.dart/bloc/category_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:mymib/logic/blocs/authentification_bloc/auth_bloc.dart';
@@ -21,13 +24,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late SharedPreferences _prefs;
+  bool isInitialized = false;
   var isLoading = false;
   var userLoading = false;
+
+  Future<void> _initialize() async {
+    _prefs = await SharedPreferences.getInstance();
+    isInitialized = _prefs.getBool('initialized') ?? false;
+    if (!isInitialized) {
+      _initializeCategories();
+    }
+  }
+
+  Future<void> _initializeCategories() async {
+    context.read<CategoryBloc>().add(InitializeDefaultCategories());
+    _prefs.setBool('initialized', true);
+  }
+
   @override
   void initState() {
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   context.read<UserBloc>().add(LoadUser());
     // });
+    _initialize();
+    context.read<CategoryBloc>().add(GetCategories());
+
     super.initState();
   }
 
