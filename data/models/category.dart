@@ -1,5 +1,6 @@
+import 'package:equatable/equatable.dart';
 
-class Category {
+class Category extends Equatable {
   final int? id;
   final String category;
   Category({
@@ -42,4 +43,8 @@ class Category {
 
   @override
   int get hashCode => id.hashCode ^ category.hashCode;
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id, category];
 }

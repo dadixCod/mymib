@@ -1,6 +1,5 @@
 // ignore_for_file: unused_local_variable
 
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
-import 'package:mymib/data/models/category.dart';
 import 'package:mymib/presentation/widgets/custom_segmented_button.dart';
 import 'package:mymib/presentation/widgets/fancy_rounded_button.dart';
 import 'package:mymib/presentation/widgets/inputs_form.dart';
-// import 'package:mymib/data/models/category.dart';
 
 import '../../logic/blocs/categories_bloc.dart/bloc/category_bloc.dart';
 
@@ -164,10 +161,21 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       chooseCategorySheet(
                         context,
                         size,
-                        state.revenueCategories,
-                        revenuesCategoryController,
-                        currentRevIndex,
-                        selectedRevCategory,
+                        CustomSegmentedButton(
+                          items: state.revenueCategories,
+
+                          selectedIndex:
+                              currentRevIndex, // Provide the selectedIndex
+                          onSelectionChanged: (index) {
+                            selectedRevCategory =
+                                state.revenueCategories[index].category;
+                            setState(() {
+                              revenuesCategoryController.text =
+                                  selectedRevCategory;
+                            });
+                            currentRevIndex = index; // Update the currentIndex
+                          },
+                        ),
                         true,
                       );
                     },
@@ -183,11 +191,22 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       chooseCategorySheet(
                         context,
                         size,
-                        state.expensesCategories,
-                        expensesCategoryController,
-                        currentExpIndex,
-                        selectedExpCategory,
-                        false,
+                        CustomSegmentedButton(
+                          items: state.expensesCategories,
+
+                          selectedIndex:
+                              currentExpIndex, // Provide the selectedIndex
+                          onSelectionChanged: (index) {
+                            selectedExpCategory =
+                                state.expensesCategories[index].category;
+                            setState(() {
+                              expensesCategoryController.text =
+                                  selectedExpCategory;
+                            });
+                            currentExpIndex = index; // Update the currentIndex
+                          },
+                        ),
+                        true,
                       );
                     },
                     amount: expensesAmountController,
@@ -224,10 +243,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   Future<dynamic> chooseCategorySheet(
     BuildContext context,
     Size size,
-    List<Category> list,
-    TextEditingController controller,
-    int widgetIndex,
-    String selectedCategory,
+    Widget widget,
     bool isRev,
   ) {
     return showModalBottomSheet(
@@ -242,6 +258,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             children: [
               GestureDetector(
                 onTap: () {
+                  Navigator.of(context).pop();
                   Navigator.of(context).pushNamed(
                     '/edit_categories',
                     arguments: isRev,
@@ -273,17 +290,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   ),
                 ),
               ),
-              CustomSegmentedButton(
-                items: list,
-                selectedIndex: widgetIndex, // Provide the selectedIndex
-                onSelectionChanged: (index) {
-                  selectedCategory = list[index].category;
-                  setState(() {
-                    controller.text = selectedCategory;
-                  });
-                  widgetIndex = index; // Update the currentIndex
-                },
-              )
+              widget,
             ],
           ),
         );

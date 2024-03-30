@@ -4,7 +4,10 @@ class TransactionsService {
   
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> addTransaction()async{
+  Future<void> addTransaction(
+    DateTime date,
+    
+  )async{
     
   }
 

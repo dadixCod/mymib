@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
 import 'package:mymib/data/models/category.dart';
 import 'package:mymib/logic/blocs/categories_bloc.dart/bloc/category_bloc.dart';
@@ -38,109 +37,116 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
         title: const Text("Editer les categories"),
         centerTitle: true,
       ),
-      body: BlocBuilder<CategoryBloc, CategoryState>(
+      body: BlocConsumer<CategoryBloc, CategoryState>(
+        listener: (context, state) {},
         builder: (context, state) {
           var listToShow = widget.fromRevenues
               ? state.revenueCategories
               : state.expensesCategories;
-          return Container(
+          return SizedBox(
             height: size.height * 0.8,
             width: size.width,
-            child: ListView.separated(
-              itemBuilder: (context, index) {
-                final category = listToShow[index];
-                return Dismissible(
-                  direction: DismissDirection.endToStart,
-                  key: ValueKey(index),
-                  background: Container(
-                    color: context.colorScheme.error,
-                    padding: const EdgeInsets.only(right: 20),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Icon(
-                          Icons.delete,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                  confirmDismiss: (direction) async {
-                    var delete = false;
-                    if (direction == DismissDirection.endToStart) {
-                      await showDialog<bool>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          content: const Text(
-                            "Voulez - vous supprimer cette catégorie?",
+            child: listToShow.isEmpty
+                ? const Center(
+                    child: Text("Cette catégorie est vide"),
+                  )
+                : ListView.separated(
+                    itemBuilder: (context, index) {
+                      final category = listToShow[index];
+                      return Dismissible(
+                        direction: DismissDirection.endToStart,
+                        key: UniqueKey(),
+                        background: Container(
+                          color: context.colorScheme.error,
+                          padding: const EdgeInsets.only(right: 20),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            ],
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(
-                                "Non",
-                                style: context.textTheme.bodyLarge?.copyWith(
-                                    // color: context.colorScheme.error,
-
-                                    ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                delete = true;
-                                context.read<CategoryBloc>().add(
-                                      DeleteCategory(
-                                        table: widget.fromRevenues
-                                            ? 'revenuecategories'
-                                            : 'expensecategories',
-                                        id: category.id!,
-                                      ),
-                                    );
-                                context
-                                    .read<CategoryBloc>()
-                                    .add(GetCategories());
-                                setState(() {});
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(
-                                "Oui",
-                                style: context.textTheme.bodyLarge?.copyWith(
-                                  color: context.colorScheme.error,
+                        ),
+                        confirmDismiss: (direction) async {
+                          var delete = false;
+                          if (direction == DismissDirection.endToStart) {
+                            await showDialog<bool>(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                content: const Text(
+                                  "Voulez - vous supprimer cette catégorie?",
                                 ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      "Non",
+                                      style:
+                                          context.textTheme.bodyLarge?.copyWith(
+                                              // color: context.colorScheme.error,
+
+                                              ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      delete = true;
+                                      context.read<CategoryBloc>().add(
+                                            DeleteCategory(
+                                              table: widget.fromRevenues
+                                                  ? 'revenuecategories'
+                                                  : 'expensecategories',
+                                              id: category.id!,
+                                            ),
+                                          );
+                                      // setState(() {});
+                                      context
+                                          .read<CategoryBloc>()
+                                          .add(GetCategories());
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      "Oui",
+                                      style:
+                                          context.textTheme.bodyLarge?.copyWith(
+                                        color: context.colorScheme.error,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
+                            );
+                          }
+                          return delete;
+                        },
+                        child: ListTile(
+                          trailing: IconButton(
+                            onPressed: () {
+                              categoryController.text = category.category;
+                              addEditCategory(context, size, categoryController,
+                                  true, category);
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              size: 22,
+                              color: context.colorScheme.outline,
                             ),
-                          ],
+                          ),
+                          title: Text(category.category),
                         ),
                       );
-                      return delete;
-                    }
-                  },
-                  child: ListTile(
-                    trailing: IconButton(
-                      onPressed: () {
-                        categoryController.text = category.category;
-                        addEditCategory(
-                            context, size, categoryController, true, category);
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        size: 22,
-                        color: context.colorScheme.outline,
-                      ),
-                    ),
-                    title: Text(category.category),
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider(
+                        height: 1,
+                      );
+                    },
+                    itemCount: listToShow.length,
                   ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Divider(
-                  height: 1,
-                );
-              },
-              itemCount: listToShow.length,
-            ),
           );
         },
       ),
@@ -243,8 +249,8 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
                                       ),
                                     );
                             context.read<CategoryBloc>().add(GetCategories());
-                            setState(() {});
                             Navigator.of(context).pop();
+                            // setState(() {});
                           }
                         },
                         text: 'Enregistrer',

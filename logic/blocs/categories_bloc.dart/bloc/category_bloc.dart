@@ -77,7 +77,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<DeleteCategory>(
       (event, emit) async {
         await categoriesService.deleteDataAuto(event.table, event.id);
+
         add(GetCategories());
+        log('fetched new data');
       },
     );
   }
