@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mymib/data/models/transaction.dart';
+import 'package:mymib/presentation/screens/edit_transaction_screen.dart';
 import 'package:mymib/presentation/screens/premium_sceen.dart';
 import '../../presentation/screens/screens.dart';
 
@@ -27,12 +29,18 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const PremiumScreen());
 
       case '/add':
-        return MaterialPageRoute(builder: (_) => const AddExpenseScreen());
+        return MaterialPageRoute(builder: (_) => const AddTransactionScreen());
       case '/edit_categories':
         {
           final fromRevenue = settings.arguments as bool;
           return MaterialPageRoute(
               builder: (_) =>  EditCategoriesScreen(fromRevenues: fromRevenue,));
+        }
+      case '/edit_transaction':
+        {
+          final transaction = settings.arguments as Transaction;
+          return MaterialPageRoute(
+              builder: (_) =>  EditTransactionScreen(transaction: transaction));
         }
       case '/profile':
         return MaterialPageRoute(builder: (_) => const ProfileScreen());

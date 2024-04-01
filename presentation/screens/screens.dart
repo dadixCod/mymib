@@ -1,4 +1,4 @@
-export './add_expense_screen.dart';
+export 'add_transaction_screen.dart';
 export './authentication_screen.dart';
 export './edit_categories_screen.dart';
 export './home_screen.dart';

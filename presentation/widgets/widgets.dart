@@ -7,3 +7,4 @@ export './fancy_rounded_button.dart';
 export './gradient_container.dart';
 export './row_text_field.dart';
 export './transaction_card.dart';
+export './statistics_view.dart';

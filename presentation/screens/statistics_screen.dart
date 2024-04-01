@@ -1,7 +1,15 @@
-import 'package:fl_chart/fl_chart.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:mymib/logic/blocs/date_bloc.dart/bloc/date_bloc.dart';
+import 'package:mymib/logic/blocs/statistics_bloc/statistics_bloc.dart';
+import 'package:mymib/logic/blocs/transactions_bloc/transactions_bloc.dart';
+import 'package:mymib/logic/blocs/transactions_bloc/transactions_event.dart';
+import 'package:mymib/logic/blocs/transactions_bloc/transactions_state.dart';
+import 'package:mymib/presentation/widgets/statistics_view.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -13,51 +21,20 @@ class StatisticsScreen extends StatefulWidget {
 class _StatisticsScreenState extends State<StatisticsScreen> {
   Set<String> selected = {};
   DateTime? selectedDate;
+  var transactionsLoading = false;
+
+  @override
+  void initState() {
+    selectedDate = DateTime.now();
+    context.read<TransactionsBloc>().add(LoadFilteredTransactions(
+        selectedDate!, FirebaseAuth.instance.currentUser!.uid));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviseSize = context.deviceSize;
-    final List<Color> colors = [
-      Colors.deepOrange,
-      Colors.orange,
-      Colors.amber,
-      Colors.green,
-    ];
-    final List<double> values = [
-      40,
-      30,
-      20,
-      10,
-    ];
-    final List<double> valuesExpenses = [
-      45,
-      25,
-      20,
-      10,
-    ];
-    final List<String> categories = [
-      'Freelance',
-      'Salaire',
-      'Bourse',
-      'Autre',
-    ];
-    final List<String> categoriesExpenses = [
-      'Transport',
-      'Etudes',
-      'Sport',
-      'Autre',
-    ];
-    final List<double> amounts = [
-      95000,
-      40000,
-      20000,
-      1000,
-    ];
-    final List<double> amountsExpenses = [
-      20000,
-      10000,
-      8000,
-      4000,
-    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -92,6 +69,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     setState(() {
                       selected = {};
                       selectedDate = date;
+                      context.read<DateBloc>().add(SelectOneDate(date: date));
                     });
                   }
                   return;
@@ -104,190 +82,158 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: deviseSize.width,
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              margin: const EdgeInsets.only(bottom: 10),
-              child: SegmentedButton(
-                emptySelectionAllowed: true,
-                onSelectionChanged: (newSelection) {
-                  setState(() {
-                    selected = newSelection;
-                    selectedDate = null;
-                  });
-                },
-                segments: const [
-                  ButtonSegment(
-                    value: 'Semaine',
-                    label: Text(
-                      'Semaine',
-                    ),
-                  ),
-                  ButtonSegment(
-                    value: 'Mois',
-                    label: Text(
-                      'Mois',
-                    ),
-                  ),
-                  ButtonSegment(
-                    value: 'Année',
-                    label: Text(
-                      'Année',
-                    ),
-                  ),
-                ],
-                selected: selected,
-              ),
-            ),
-            DefaultTabController(
-              length: 2,
+      body: BlocConsumer<TransactionsBloc, TransactionState>(
+        listener: (context, state) {
+          if (state is TransactionLoading) {
+            setState(() {
+              transactionsLoading = true;
+            });
+          } else if (state is TransactionsLoaded) {
+            setState(() {
+              transactionsLoading = false;
+            });
+          }
+        },
+        builder: (context, state) {
+          if (state is TransactionLoading) {
+            return Center(
+              child: SpinKitFadingCircle(color: context.colorScheme.primary),
+            );
+          } else if (state is TransactionsLoaded) {
+            double revenuesTotal = 0;
+            double expensesTotal = 0;
+            final transactions = state.transactions;
+            context
+                .read<StatisticsBloc>()
+                .add(CalculateStatistics(transactions));
+            for (var tr in transactions) {
+              revenuesTotal += tr.revenueAmount ?? 0;
+              expensesTotal += tr.expenseAmount ?? 0;
+            }
+            return SingleChildScrollView(
               child: Column(
                 children: [
-                  const TabBar(
-                    tabs: [
-                      Tab(text: 'Revenus'),
-                      Tab(text: 'Dépenses'),
-                    ],
-                  ),
-                  SizedBox(
-                    height: deviseSize.height * 0.8,
-                    child: TabBarView(
-                      children: [
-                        StatisticsView(
-                          deviseSize: deviseSize,
-                          values: values,
-                          categories: categories,
-                          colors: colors,
-                          amounts: amounts,
+                  Container(
+                    width: deviseSize.width,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: SegmentedButton(
+                      emptySelectionAllowed: true,
+                      onSelectionChanged: (newSelection) {
+                        setState(() {
+                          selected = newSelection;
+                          if (newSelection.first == '1') {
+                            context.read<DateBloc>().add(SelectDateRange(
+                                  startDate: DateTime.now()
+                                      .subtract(const Duration(days: 7)),
+                                  endDate: DateTime.now(),
+                                ));
+                          } else if (newSelection.first == '2') {
+                            context.read<DateBloc>().add(SelectDateRange(
+                                  startDate: DateTime.now()
+                                      .subtract(const Duration(days: 30)),
+                                  endDate: DateTime.now(),
+                                ));
+                          } else if (newSelection.first == '3') {
+                            context.read<DateBloc>().add(SelectDateRange(
+                                  startDate: DateTime.now()
+                                      .subtract(const Duration(days: 365)),
+                                  endDate: DateTime.now(),
+                                ));
+                          }
+                          selectedDate = null;
+                        });
+                      },
+                      segments: const [
+                        ButtonSegment(
+                          value: '1',
+                          label: Text(
+                            'Semaine',
+                          ),
                         ),
-                        StatisticsView(
-                          deviseSize: deviseSize,
-                          values: valuesExpenses,
-                          categories: categoriesExpenses,
-                          colors: colors,
-                          amounts: amountsExpenses,
+                        ButtonSegment(
+                          value: '2',
+                          label: Text(
+                            'Mois',
+                          ),
+                        ),
+                        ButtonSegment(
+                          value: '3',
+                          label: Text(
+                            'Année',
+                          ),
                         ),
                       ],
+                      selected: selected,
                     ),
+                  ),
+                  BlocBuilder<StatisticsBloc, StatisticsState>(
+                    builder: (context, state) {
+                      return DefaultTabController(
+                        length: 2,
+                        child: Column(
+                          children: [
+                            TabBar(
+                              tabs: [
+                                Tab(text: 'Revenus $revenuesTotal DA'),
+                                Tab(text: 'Dépenses $expensesTotal DA'),
+                              ],
+                            ),
+                            SizedBox(
+                              height: deviseSize.height * 0.8,
+                              child: revenuesTotal == 0 || expensesTotal == 0
+                                  ? SizedBox(
+                                      height: deviseSize.height * 0.4,
+                                      width: deviseSize.width * 0.8,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/add_data.png',
+                                            ),
+                                            SizedBox(
+                                              height: deviseSize.height * 0.02,
+                                            ),
+                                            const Text(
+                                              'Aucune transaction ce jour-là.',
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : TabBarView(
+                                      children: [
+                                        StatisticsView(
+                                          deviseSize: deviseSize,
+                                          categories: state.revenuesStatistics,
+                                          isExpensesList: false,
+                                          amount: revenuesTotal,
+                                        ),
+                                        StatisticsView(
+                                          deviseSize: deviseSize,
+                                          categories: state.expensesStatistics,
+                                          isExpensesList: true,
+                                          amount: expensesTotal,
+                                        ),
+                                      ],
+                                    ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
                   )
                 ],
               ),
-            )
-          ],
-        ),
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
-    );
-  }
-}
-
-class StatisticsView extends StatelessWidget {
-  const StatisticsView({
-    super.key,
-    required this.deviseSize,
-    required this.values,
-    required this.categories,
-    required this.colors,
-    required this.amounts,
-  });
-
-  final Size deviseSize;
-  final List<double> values;
-  final List<String> categories;
-  final List<Color> colors;
-  final List<double> amounts;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: deviseSize.height * 0.4,
-          width: deviseSize.width,
-          padding: const EdgeInsets.symmetric(vertical: 30),
-          color: context.colorScheme.primaryContainer.withOpacity(0.3),
-          child: Center(
-            child: PieChart(
-              PieChartData(
-                centerSpaceRadius: 0,
-                sectionsSpace: 2,
-                sections: List.generate(
-                  4,
-                  (index) => PieChartSectionData(
-                    value: values[index] / 100,
-                    title: categories[index],
-                    titlePositionPercentageOffset: 0.6,
-                    color: colors[index],
-                    titleStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                    radius: 100,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: deviseSize.height * 0.01),
-        SizedBox(
-          height: deviseSize.height * 0.3,
-          child: ListView.separated(
-              itemCount: 4,
-              separatorBuilder: (context, index) {
-                return Divider(
-                  height: 1,
-                  color: context.colorScheme.outline.withOpacity(0.3),
-                );
-              },
-              itemBuilder: (context, index) {
-                return Container(
-                  height: deviseSize.height * 0.07,
-                  width: deviseSize.width,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  color: context.colorScheme.primaryContainer.withOpacity(0.4),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: deviseSize.height * 0.035,
-                        width: deviseSize.width * 0.15,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: colors[index],
-                        ),
-                        child: Center(
-                          child: Text(
-                            "${values[index]}%",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: context.colorScheme.background,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: deviseSize.width * 0.02),
-                      Expanded(
-                        child: Text(
-                          categories[index],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '${amounts[index]} DA',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }),
-        ),
-      ],
     );
   }
 }

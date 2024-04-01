@@ -7,6 +7,7 @@ import 'package:mymib/core/utils/extensions.dart';
 import 'package:mymib/logic/blocs/categories_bloc.dart/bloc/category_bloc.dart';
 import 'package:mymib/logic/blocs/date_bloc.dart/bloc/date_bloc.dart';
 import 'package:mymib/logic/blocs/navigation_bloc/navigation_bloc.dart';
+import 'package:mymib/logic/blocs/statistics_bloc/statistics_bloc.dart';
 import 'package:mymib/logic/blocs/transactions_bloc/transactions_bloc.dart';
 import 'package:mymib/logic/blocs/user_bloc/user_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,9 +53,11 @@ class MainApp extends StatelessWidget {
           create: (context) => DateBloc(),
         ),
         BlocProvider(
-          create: (context) => TransactionsBloc(
-            dateBloc: BlocProvider.of<DateBloc>(context)
-          ),
+          create: (context) =>
+              TransactionsBloc(dateBloc: BlocProvider.of<DateBloc>(context)),
+        ),
+        BlocProvider(
+          create: (context) => StatisticsBloc(),
         )
       ],
       child: MaterialApp(

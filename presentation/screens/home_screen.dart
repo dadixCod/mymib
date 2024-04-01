@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Text(
                 DateFormat.Md().format(oneSelectedDate),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
@@ -264,9 +264,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
           } else {
-            context
-                .read<TransactionsBloc>()
-                .add(LoadTransactions(FirebaseAuth.instance.currentUser!.uid));
+            context.read<TransactionsBloc>().add(LoadFilteredTransactions(
+                DateTime.now(), FirebaseAuth.instance.currentUser!.uid));
             return Container();
           }
         },

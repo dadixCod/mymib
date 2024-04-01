@@ -18,14 +18,15 @@ import 'package:mymib/presentation/widgets/inputs_form.dart';
 
 import '../../logic/blocs/categories_bloc.dart/bloc/category_bloc.dart';
 
-class AddExpenseScreen extends StatefulWidget {
-  const AddExpenseScreen({super.key});
+class EditTransactionScreen extends StatefulWidget {
+  final Transaction transaction;
+  const EditTransactionScreen({super.key, required this.transaction});
 
   @override
-  State<AddExpenseScreen> createState() => _AddExpenseScreenState();
+  State<EditTransactionScreen> createState() => _EditTransactionScreenState();
 }
 
-class _AddExpenseScreenState extends State<AddExpenseScreen> {
+class _EditTransactionScreenState extends State<EditTransactionScreen> {
   var date = DateTime.now();
 
   late PageController pageController;
@@ -52,16 +53,25 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     revenuesCategoryController = TextEditingController();
     revenuesAmountController = TextEditingController();
     revenuesNoteController = TextEditingController();
-    var formattedDate = DateFormat.yMd().format(date);
-    dateController.text = formattedDate;
+
+    //forms keys
     revenuesKey = GlobalKey<FormState>();
     expensesKey = GlobalKey<FormState>();
-    selectedRevCategory =
-        context.read<CategoryBloc>().state.revenueCategories[0].category;
+
+    //initializing
+    var formattedDate = DateFormat.yMd().format(widget.transaction.date);
+    selectedRevCategory = widget.transaction.revenueCategory;
+    selectedExpCategory = widget.transaction.expenseCategory;
+
+    //set the initialized objects
+    dateController.text = formattedDate;
     revenuesCategoryController.text = selectedRevCategory;
-    selectedExpCategory =
-        context.read<CategoryBloc>().state.expensesCategories[0].category;
     expensesCategoryController.text = selectedExpCategory;
+    revenuesAmountController.text = widget.transaction.revenueAmount.toString();
+    expensesAmountController.text = widget.transaction.expenseAmount.toString();
+    revenuesNoteController.text = widget.transaction.revenueNote ?? '';
+    expensesNoteController.text = widget.transaction.expenseNote ?? '';
+
     super.initState();
   }
 
@@ -94,7 +104,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           ),
         ),
         title: const Text(
-          'Transaction',
+          'Editer la transaction',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w500,
@@ -262,7 +272,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   }
                   final String revNote = revenuesNoteController.text.trim();
                   final String expNote = expensesNoteController.text.trim();
-                  final transaction = Transaction(
+                  final newTransaction = Transaction(
                     date: DateFormat.yMd().parse(dateController.text),
                     revenueAmount: revAmount,
                     expenseAmount: expAmount,
@@ -271,12 +281,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     revenueNote: revNote.isNotEmpty ? revNote : '',
                     expenseNote: expNote.isNotEmpty ? expNote : '',
                   );
-                  context.read<TransactionsBloc>().add(
-                        AddTransaction(
-                          FirebaseAuth.instance.currentUser!.uid,
-                          transaction,
-                        ),
-                      );
+                  context.read<TransactionsBloc>().add(UpdateTransaction(
+                        FirebaseAuth.instance.currentUser!.uid,
+                        widget.transaction.id!,
+                        newTransaction,
+                      ));
                 },
                 color: Colors.blueAccent,
                 child: isLoading
@@ -284,7 +293,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         color: context.colorScheme.surface,
                       )
                     : Text(
-                        'Enregistrer',
+                        'Editer',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
