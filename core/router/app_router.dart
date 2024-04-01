@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mymib/presentation/screens/premium_sceen.dart';
 import '../../presentation/screens/screens.dart';
 
 class AppRouter {
@@ -22,6 +23,8 @@ class AppRouter {
 
       case '/stats':
         return MaterialPageRoute(builder: (_) => const StatisticsScreen());
+      case '/premium':
+        return MaterialPageRoute(builder: (_) => const PremiumScreen());
 
       case '/add':
         return MaterialPageRoute(builder: (_) => const AddExpenseScreen());

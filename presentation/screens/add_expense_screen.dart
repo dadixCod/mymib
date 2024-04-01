@@ -1,12 +1,17 @@
 // ignore_for_file: unused_local_variable
 
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:mymib/data/models/transaction.dart';
+import 'package:mymib/logic/blocs/transactions_bloc/transactions_bloc.dart';
+import 'package:mymib/logic/blocs/transactions_bloc/transactions_event.dart';
+import 'package:mymib/logic/blocs/transactions_bloc/transactions_state.dart';
 import 'package:mymib/presentation/widgets/custom_segmented_button.dart';
 import 'package:mymib/presentation/widgets/fancy_rounded_button.dart';
 import 'package:mymib/presentation/widgets/inputs_form.dart';
@@ -70,6 +75,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     super.dispose();
   }
 
+  var isLoading = false;
   var sliderIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -88,7 +94,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           ),
         ),
         title: const Text(
-          'Revenus',
+          'Transaction',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w500,
@@ -126,20 +132,19 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 ),
               },
               onValueChanged: (index) {
+                if (index == 1) {
+                  pageController.nextPage(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.fastOutSlowIn,
+                  );
+                } else if (index == 0) {
+                  pageController.previousPage(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.fastOutSlowIn,
+                  );
+                }
                 setState(() {
-                  if (index == 1) {
-                    sliderIndex = index!;
-                    pageController.nextPage(
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.fastOutSlowIn,
-                    );
-                  } else if (index == 0) {
-                    sliderIndex = index!;
-                    pageController.previousPage(
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.fastOutSlowIn,
-                    );
-                  }
+                  sliderIndex = index!;
                 });
               },
             ),
@@ -150,6 +155,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               width: size.width * 0.9,
               child: PageView(
                 controller: pageController,
+                onPageChanged: (value) {
+                  setState(() {
+                    sliderIndex = value;
+                  });
+                },
                 children: [
                   //revenues
 
@@ -206,7 +216,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                             currentExpIndex = index; // Update the currentIndex
                           },
                         ),
-                        true,
+                        false,
                       );
                     },
                     amount: expensesAmountController,
@@ -216,24 +226,73 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               ),
             );
           }),
-          FancyRoundedButton(
-            onTap: () {
-              double? revAmount;
-              double? expAmount;
-              if ((revenuesAmountController.text.isEmpty &&
-                      expensesAmountController.text.isNotEmpty) ||
-                  (revenuesAmountController.text.isNotEmpty &&
-                      expensesAmountController.text.isEmpty)) {
-                if (revenuesAmountController.text.isNotEmpty) {
-                  revAmount = double.tryParse(revenuesAmountController.text);
-                }
-                if (expensesAmountController.text.isNotEmpty) {
-                  expAmount = double.tryParse(revenuesAmountController.text);
-                }
+          BlocConsumer<TransactionsBloc, TransactionState>(
+            listener: (context, state) {
+              if (state is TransactionSuccess) {
+                setState(() {
+                  isLoading = false;
+                });
+                Navigator.of(context).pop();
+              } else if (state is TransactionLoading) {
+                setState(() {
+                  isLoading = true;
+                });
+              } else if (state is TransactionFailure) {
+                AlertDialog(
+                  content: Text(state.errorMessage),
+                );
               }
             },
-            text: 'Enregistrer',
-            color: Colors.blueAccent,
+            builder: (context, state) {
+              return FancyRoundedButton(
+                onTap: () {
+                  double? revAmount =
+                      double.tryParse(revenuesAmountController.text);
+                  double? expAmount =
+                      double.tryParse(expensesAmountController.text);
+
+                  if (revAmount == null && expAmount != null) {
+                    revAmount = 0.0;
+                  } else if (revAmount != null && expAmount == null) {
+                    expAmount = 0.0;
+                  } else if (revAmount == null && expAmount == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Remplir au moins un des montants")));
+                    return;
+                  }
+                  final String revNote = revenuesNoteController.text.trim();
+                  final String expNote = expensesNoteController.text.trim();
+                  final transaction = Transaction(
+                    date: DateFormat.yMd().parse(dateController.text),
+                    revenueAmount: revAmount,
+                    expenseAmount: expAmount,
+                    revenueCategory: selectedRevCategory,
+                    expenseCategory: selectedExpCategory,
+                    revenueNote: revNote.isNotEmpty ? revNote : '',
+                    expenseNote: expNote.isNotEmpty ? expNote : '',
+                  );
+                  context.read<TransactionsBloc>().add(
+                        AddTransaction(
+                          FirebaseAuth.instance.currentUser!.uid,
+                          transaction,
+                        ),
+                      );
+                },
+                color: Colors.blueAccent,
+                child: isLoading
+                    ? SpinKitFadingCircle(
+                        color: context.colorScheme.surface,
+                      )
+                    : Text(
+                        'Enregistrer',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: context.colorScheme.surface,
+                        ),
+                      ),
+              );
+            },
           )
         ],
       ),

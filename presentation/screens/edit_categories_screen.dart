@@ -141,7 +141,7 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return Divider(
+                      return const Divider(
                         height: 1,
                       );
                     },
@@ -163,7 +163,7 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
             null,
           );
         },
-        child: Icon(
+        child: const Icon(
           Icons.add,
         ),
       ),
@@ -253,9 +253,16 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
                             // setState(() {});
                           }
                         },
-                        text: 'Enregistrer',
                         color: context.colorScheme.primary,
-                      )
+                        child: Text(
+                          'Enregistrer',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: context.colorScheme.surface,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

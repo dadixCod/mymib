@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mymib/core/utils/extensions.dart';
 import 'package:mymib/logic/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:mymib/presentation/screens/home_screen.dart';
+import 'package:mymib/presentation/screens/premium_sceen.dart';
 import 'package:mymib/presentation/screens/profile_screen.dart';
 import 'package:mymib/presentation/screens/statistics_screen.dart';
 
@@ -16,6 +17,7 @@ class MainScreen extends StatefulWidget {
 final List screens = [
   const HomeScreen(),
   const StatisticsScreen(),
+  const PremiumScreen(),
   const ProfileScreen(),
 ];
 
@@ -34,6 +36,9 @@ class _MainScreenState extends State<MainScreen> {
           resizeToAvoidBottomInset: false,
           body: screens[state.pageIndex],
           bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: context.colorScheme.outline.withOpacity(0.3),
+            selectedItemColor: context.colorScheme.primary,
+            elevation: 1,
             currentIndex: state.pageIndex,
             onTap: (index) {
               context.read<NavigationBloc>().add(
@@ -42,8 +47,8 @@ class _MainScreenState extends State<MainScreen> {
             },
             items: [
               BottomNavigationBarItem(
-                backgroundColor: Colors.transparent,
-                label: 'Home',
+                // backgroundColor: Colors.transparent,
+                label: 'Acceuil',
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 4),
                   child: Image.asset(
@@ -64,8 +69,8 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
               BottomNavigationBarItem(
-                backgroundColor: Colors.transparent,
-                label: 'statistics',
+                // backgroundColor: Colors.transparent,
+                label: 'statistiques',
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 4),
                   child: Image.asset(
@@ -86,7 +91,29 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
               BottomNavigationBarItem(
-                backgroundColor: Colors.transparent,
+                // backgroundColor: Colors.transparent,
+                label: 'Premium',
+                icon: Padding(
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 4),
+                  child: Image.asset(
+                    'assets/icons/premium.png',
+                    height: 25,
+                    width: 25,
+                    color: context.colorScheme.outline.withOpacity(0.4),
+                  ),
+                ),
+                activeIcon: Padding(
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 4),
+                  child: Image.asset(
+                    'assets/icons/premium_filled.png',
+                    height: 25,
+                    width: 25,
+                    color: context.colorScheme.primary,
+                  ),
+                ),
+              ),
+              BottomNavigationBarItem(
+                // backgroundColor: Colors.transparent,
                 label: 'profile',
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 4),

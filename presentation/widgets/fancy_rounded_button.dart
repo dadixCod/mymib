@@ -4,10 +4,10 @@ import 'package:mymib/core/utils/extensions.dart';
 
 class FancyRoundedButton extends StatelessWidget {
   final void Function()? onTap;
-  final String text;
+  final Widget child;
   final Color color;
   const FancyRoundedButton({
-    super.key, this.onTap, required this.text, required this.color,
+    super.key, this.onTap, required this.child, required this.color,
   });
 
   @override
@@ -24,14 +24,8 @@ class FancyRoundedButton extends StatelessWidget {
           color: color,
         ),
         child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: context.colorScheme.surface,
-            ),
-          ),
+          child: child
+          
         ),
       ),
     );

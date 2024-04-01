@@ -1,13 +1,14 @@
-
 class Transaction {
+  final String?  id;
   final DateTime date;
-  final int revenueAmount;
-  final int expenseAmount;
+  final double? revenueAmount;
+  final double? expenseAmount;
   final String? revenueNote;
   final String? expenseNote;
   final String revenueCategory;
   final String expenseCategory;
   Transaction({
+    this.id,
     required this.date,
     required this.revenueAmount,
     required this.expenseAmount,
@@ -16,12 +17,11 @@ class Transaction {
     required this.revenueCategory,
     required this.expenseCategory,
   });
-  
 
   Transaction copyWith({
     DateTime? date,
-    int? revenueAmount,
-    int? expenseAmount,
+    double? revenueAmount,
+    double? expenseAmount,
     String? revenueNote,
     String? expenseNote,
     String? revenueCategory,
@@ -40,9 +40,9 @@ class Transaction {
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'date': date.millisecondsSinceEpoch,
-      'revenueAmount': revenueAmount,
-      'expenseAmount': expenseAmount,
+      'date': date.toIso8601String(),
+      'revenueAmount': revenueAmount.toString(),
+      'expenseAmount': expenseAmount.toString(),
       'revenueNote': revenueNote,
       'expenseNote': expenseNote,
       'revenueCategory': revenueCategory,
@@ -52,16 +52,18 @@ class Transaction {
 
   factory Transaction.fromJson(Map<String, dynamic> map) {
     return Transaction(
-      date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
-      revenueAmount: map['revenueAmount'] as int,
-      expenseAmount: map['expenseAmount'] as int,
-      revenueNote: map['revenueNote'] != null ? map['revenueNote'] as String : null,
-      expenseNote: map['expenseNote'] != null ? map['expenseNote'] as String : null,
-      revenueCategory: map['revenueCategory'] as String,
-      expenseCategory: map['expenseCategory'] as String,
+      id: map['id'],
+      date: DateTime.parse(map['date']),
+      revenueAmount: double.parse(map['revenueAmount']),
+      expenseAmount: double.parse( map['expenseAmount']),
+      revenueNote:
+          map['revenueNote'],
+      expenseNote:
+          map['expenseNote'],
+      revenueCategory: map['revenueCategory'] ,
+      expenseCategory: map['expenseCategory'] ,
     );
   }
-
 
   @override
   String toString() {
@@ -71,25 +73,24 @@ class Transaction {
   @override
   bool operator ==(covariant Transaction other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.date == date &&
-      other.revenueAmount == revenueAmount &&
-      other.expenseAmount == expenseAmount &&
-      other.revenueNote == revenueNote &&
-      other.expenseNote == expenseNote &&
-      other.revenueCategory == revenueCategory &&
-      other.expenseCategory == expenseCategory;
+
+    return other.date == date &&
+        other.revenueAmount == revenueAmount &&
+        other.expenseAmount == expenseAmount &&
+        other.revenueNote == revenueNote &&
+        other.expenseNote == expenseNote &&
+        other.revenueCategory == revenueCategory &&
+        other.expenseCategory == expenseCategory;
   }
 
   @override
   int get hashCode {
     return date.hashCode ^
-      revenueAmount.hashCode ^
-      expenseAmount.hashCode ^
-      revenueNote.hashCode ^
-      expenseNote.hashCode ^
-      revenueCategory.hashCode ^
-      expenseCategory.hashCode;
+        revenueAmount.hashCode ^
+        expenseAmount.hashCode ^
+        revenueNote.hashCode ^
+        expenseNote.hashCode ^
+        revenueCategory.hashCode ^
+        expenseCategory.hashCode;
   }
 }
