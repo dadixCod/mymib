@@ -8,3 +8,8 @@ export './gradient_container.dart';
 export './row_text_field.dart';
 export './transaction_card.dart';
 export './statistics_view.dart';
+export './profile_info_container.dart';
+export './contact_container.dart';
+export './individual_premium.dart';
+export './company_premium.dart';
+export './offer_card.dart';

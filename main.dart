@@ -24,14 +24,24 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   AppRouter appRouter = AppRouter();
+  String selectedLanguage = 'fr';
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? savedLanguage = prefs.getString('selectedLanguage');
+  if (savedLanguage != null) {
+    selectedLanguage = savedLanguage;
+  }
+
   runApp(MainApp(
     appRouter: appRouter,
+    selectedLanguage: selectedLanguage,
   ));
 }
 
 class MainApp extends StatelessWidget {
+  final String selectedLanguage;
   final AppRouter appRouter;
-  const MainApp({super.key, required this.appRouter});
+  const MainApp(
+      {super.key, required this.appRouter, required this.selectedLanguage});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +72,7 @@ class MainApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        locale: const Locale('fr'),
+        locale: Locale(selectedLanguage),
         localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -85,7 +95,6 @@ class MainApp extends StatelessWidget {
             future: SharedPreferences.getInstance(),
             builder: (context, AsyncSnapshot<SharedPreferences> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                // Show loading indicator while waiting for SharedPreferences to load
                 return Center(
                   child: SpinKitFadingCircle(
                     color: context.colorScheme.primary,
@@ -97,9 +106,9 @@ class MainApp extends StatelessWidget {
               final int? onboardingCompleted =
                   prefs.getInt('onboardingCompleted');
 
-              // Check if onboarding has been completed before
+              //check onboarding state
               if (onboardingCompleted != null && onboardingCompleted == 1) {
-                // Onboarding already completed, navigate to home screen directly
+                // Onboarding already completed
                 return const AuthenticationScreen();
               } else {
                 return const OnBoardingScreen();

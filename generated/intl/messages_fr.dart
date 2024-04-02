@@ -23,11 +23,16 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "company": MessageLookupByLibrary.simpleMessage("Une entreprise"),
+        "companyExpenses": MessageLookupByLibrary.simpleMessage("Sorties"),
+        "companyRevenues": MessageLookupByLibrary.simpleMessage("Entrés"),
+        "confirmDeleteTransaction": MessageLookupByLibrary.simpleMessage(
+            "Voulez-vous supprimer cette transaction?"),
         "contineWith":
             MessageLookupByLibrary.simpleMessage("Ou continuez avec"),
         "continueText": MessageLookupByLibrary.simpleMessage("Continuer"),
         "createAccount":
             MessageLookupByLibrary.simpleMessage("Créer un compte"),
+        "currency": MessageLookupByLibrary.simpleMessage("DA"),
         "didHaveAccount":
             MessageLookupByLibrary.simpleMessage("Vous avez un compte ?"),
         "didNotHaveAccount": MessageLookupByLibrary.simpleMessage(
@@ -37,6 +42,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "L\'\'adresse e-mail ne doit pas être vide"),
         "getStarted": MessageLookupByLibrary.simpleMessage("Commencer"),
         "individual": MessageLookupByLibrary.simpleMessage("Un Individu"),
+        "individualExpenses": MessageLookupByLibrary.simpleMessage("Dépenses"),
+        "individualRevenues": MessageLookupByLibrary.simpleMessage("Revenus"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage(
             "Entrez une adresse e-mail valide"),
         "invalidPassword": MessageLookupByLibrary.simpleMessage(
@@ -44,7 +51,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalidUsername": MessageLookupByLibrary.simpleMessage(
             "Doit comporter au moins 6 caractères"),
         "login": MessageLookupByLibrary.simpleMessage("Se connecter"),
+        "monthly": MessageLookupByLibrary.simpleMessage("Mensuel"),
         "next": MessageLookupByLibrary.simpleMessage("Suivant"),
+        "no": MessageLookupByLibrary.simpleMessage("Non"),
         "page1Desc": MessageLookupByLibrary.simpleMessage(
             "My MIB est une solution de gestion financière révolutionnaire qui vous permet de prendre le contrôle de vos finances et de réaliser vos rêves"),
         "page2Desc": MessageLookupByLibrary.simpleMessage(
@@ -53,14 +62,22 @@ class MessageLookup extends MessageLookupByLibrary {
             "Visualisez votre situation financière en un clin d\'\'œil et réduisez vos dépenses. Profitez des offres exclusives de nos partenaires pour économiser sur vos achats quotidiens."),
         "password": MessageLookupByLibrary.simpleMessage("Mot de passe"),
         "prev": MessageLookupByLibrary.simpleMessage("Précédent"),
+        "selectedLangue": MessageLookupByLibrary.simpleMessage("Langue"),
+        "signout": MessageLookupByLibrary.simpleMessage("Déconnexion"),
         "signup": MessageLookupByLibrary.simpleMessage("S\'\'inscrire"),
         "signupDesc": MessageLookupByLibrary.simpleMessage(
             "Nous sommes heureux de vous avoir à bord"),
         "title": MessageLookupByLibrary.simpleMessage("My MIB"),
+        "type": MessageLookupByLibrary.simpleMessage("Type"),
         "username":
             MessageLookupByLibrary.simpleMessage("Nom d\'\'utilisateur"),
+        "weekly": MessageLookupByLibrary.simpleMessage("Hebdomadaire"),
         "welcomeAgain":
             MessageLookupByLibrary.simpleMessage("Bienvenue à nouveau"),
-        "youAre": MessageLookupByLibrary.simpleMessage("Vous êtes ?")
+        "yearly": MessageLookupByLibrary.simpleMessage("Annuel"),
+        "yes": MessageLookupByLibrary.simpleMessage("Oui"),
+        "youAre": MessageLookupByLibrary.simpleMessage("Vous êtes ?"),
+        "your_categories":
+            MessageLookupByLibrary.simpleMessage("Vos catégories")
       };
 }

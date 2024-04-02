@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mymib/data/models/transaction.dart';
-import 'package:mymib/presentation/screens/edit_transaction_screen.dart';
-import 'package:mymib/presentation/screens/premium_sceen.dart';
+
 import '../../presentation/screens/screens.dart';
 
 class AppRouter {
@@ -34,16 +33,20 @@ class AppRouter {
         {
           final fromRevenue = settings.arguments as bool;
           return MaterialPageRoute(
-              builder: (_) =>  EditCategoriesScreen(fromRevenues: fromRevenue,));
+              builder: (_) => EditCategoriesScreen(
+                    fromRevenues: fromRevenue,
+                  ));
         }
       case '/edit_transaction':
         {
           final transaction = settings.arguments as Transaction;
           return MaterialPageRoute(
-              builder: (_) =>  EditTransactionScreen(transaction: transaction));
+              builder: (_) => EditTransactionScreen(transaction: transaction));
         }
       case '/profile':
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
+      case '/coming_soon':
+        return MaterialPageRoute(builder: (_) => const ComingSoonScreen());
 
       default:
         throw 'Error getting route';

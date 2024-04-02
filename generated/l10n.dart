@@ -170,6 +170,16 @@ class S {
     );
   }
 
+  /// `Type`
+  String get type {
+    return Intl.message(
+      'Type',
+      name: 'type',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Password`
   String get password {
     return Intl.message(
@@ -195,6 +205,16 @@ class S {
     return Intl.message(
       'Log in',
       name: 'login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign out`
+  String get signout {
+    return Intl.message(
+      'Sign out',
+      name: 'signout',
       desc: '',
       args: [],
     );
@@ -305,6 +325,136 @@ class S {
     return Intl.message(
       'Continue',
       name: 'continueText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Income`
+  String get individualRevenues {
+    return Intl.message(
+      'Income',
+      name: 'individualRevenues',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expenses`
+  String get individualExpenses {
+    return Intl.message(
+      'Expenses',
+      name: 'individualExpenses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Income`
+  String get companyRevenues {
+    return Intl.message(
+      'Income',
+      name: 'companyRevenues',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expenditures`
+  String get companyExpenses {
+    return Intl.message(
+      'Expenditures',
+      name: 'companyExpenses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weekly`
+  String get weekly {
+    return Intl.message(
+      'Weekly',
+      name: 'weekly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly`
+  String get monthly {
+    return Intl.message(
+      'Monthly',
+      name: 'monthly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yearly`
+  String get yearly {
+    return Intl.message(
+      'Yearly',
+      name: 'yearly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AD`
+  String get currency {
+    return Intl.message(
+      'AD',
+      name: 'currency',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes`
+  String get yes {
+    return Intl.message(
+      'Yes',
+      name: 'yes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get no {
+    return Intl.message(
+      'No',
+      name: 'no',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to delete this transaction?`
+  String get confirmDeleteTransaction {
+    return Intl.message(
+      'Do you want to delete this transaction?',
+      name: 'confirmDeleteTransaction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your categories`
+  String get your_categories {
+    return Intl.message(
+      'Your categories',
+      name: 'your_categories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get selectedLangue {
+    return Intl.message(
+      'Language',
+      name: 'selectedLangue',
       desc: '',
       args: [],
     );

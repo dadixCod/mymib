@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
 import 'package:mymib/data/models/transaction.dart';
+import 'package:mymib/generated/l10n.dart';
 import 'package:mymib/logic/blocs/transactions_bloc/transactions_bloc.dart';
 import 'package:mymib/logic/blocs/transactions_bloc/transactions_event.dart';
 
@@ -16,7 +17,7 @@ class TransactionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviseSize = context.deviceSize;
     Constants constants = Constants(deviseSize: deviseSize);
-    // DateTime date = DateTime.parse(transaction.date);
+    final autoTexts = S.of(context);
     return GestureDetector(
       onTap: () {
         Navigator.of(context)
@@ -47,8 +48,8 @@ class TransactionCard extends StatelessWidget {
             await showDialog<bool>(
               context: context,
               builder: (context) => AlertDialog(
-                content: const Text(
-                  "Voulez - vous supprimer cette transaction?",
+                content: Text(
+                  autoTexts.confirmDeleteTransaction,
                 ),
                 actions: [
                   TextButton(
@@ -56,11 +57,8 @@ class TransactionCard extends StatelessWidget {
                       Navigator.of(context).pop();
                     },
                     child: Text(
-                      "Non",
-                      style: context.textTheme.bodyLarge?.copyWith(
-                          // color: context.colorScheme.error,
-
-                          ),
+                      autoTexts.no,
+                      style: context.textTheme.bodyLarge,
                     ),
                   ),
                   TextButton(
@@ -74,7 +72,7 @@ class TransactionCard extends StatelessWidget {
                       Navigator.of(context).pop();
                     },
                     child: Text(
-                      "Oui",
+                      autoTexts.yes,
                       style: context.textTheme.bodyLarge?.copyWith(
                         color: context.colorScheme.error,
                       ),
@@ -88,7 +86,7 @@ class TransactionCard extends StatelessWidget {
         },
         child: Container(
           width: deviseSize.width * 0.9,
-          height: constants.tenVertical * 8,
+          height: constants.tenVertical * 8.5,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -131,7 +129,7 @@ class TransactionCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${transaction.revenueAmount.toString()} DA",
+                            "${transaction.revenueAmount.toString()} ${autoTexts.currency}",
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -159,7 +157,7 @@ class TransactionCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${transaction.expenseAmount.toString()} DA",
+                            "${transaction.expenseAmount.toString()} ${autoTexts.currency}",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,

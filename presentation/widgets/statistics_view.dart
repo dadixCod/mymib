@@ -1,7 +1,7 @@
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:mymib/generated/l10n.dart';
 
 class StatisticsView extends StatelessWidget {
   const StatisticsView({
@@ -20,6 +20,7 @@ class StatisticsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final autoTexts = S.of(context);
     Color getColorForCategory(
       double categoryFraction,
       bool isExpensesList,
@@ -77,8 +78,8 @@ class StatisticsView extends StatelessWidget {
                       value: categories.values.elementAt(index) / amount,
                       title: categories.keys.elementAt(index),
                       titlePositionPercentageOffset: 0.6,
-                      color: getColorForCategory(
-                          categoryFraction, isExpensesList),
+                      color:
+                          getColorForCategory(categoryFraction, isExpensesList),
                       titleStyle: const TextStyle(
                         fontWeight: FontWeight.w600,
                       ),
@@ -149,7 +150,7 @@ class StatisticsView extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${categories.values.elementAt(index)} DA',
+                        '${categories.values.elementAt(index)} ${autoTexts.currency}',
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                         ),

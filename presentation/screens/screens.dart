@@ -9,3 +9,6 @@ export './person_type_screen.dart';
 export './profile_screen.dart';
 export './sign_up_screen.dart';
 export './statistics_screen.dart';
+export './coming_soon_screen.dart';
+export './edit_transaction_screen.dart';
+export './premium_sceen.dart';

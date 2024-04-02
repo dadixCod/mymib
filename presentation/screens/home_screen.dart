@@ -15,6 +15,9 @@ import 'package:mymib/logic/blocs/date_bloc.dart/bloc/date_bloc.dart';
 import 'package:mymib/logic/blocs/transactions_bloc/transactions_bloc.dart';
 import 'package:mymib/logic/blocs/transactions_bloc/transactions_event.dart';
 import 'package:mymib/logic/blocs/transactions_bloc/transactions_state.dart';
+import 'package:mymib/logic/blocs/user_bloc/user_bloc.dart';
+import 'package:mymib/logic/blocs/user_bloc/user_event.dart';
+import 'package:mymib/logic/blocs/user_bloc/user_state.dart';
 import 'package:mymib/presentation/widgets/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var isLoading = false;
   var userLoading = false;
   var transactionsLoading = false;
+  String type = '';
   DateTime oneSelectedDate = DateTime.now();
 
   Future<void> _initialize() async {
@@ -49,6 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     _initialize();
+    context.read<UserBloc>().add(LoadUser());
+
     context.read<TransactionsBloc>().add(LoadFilteredTransactions(
         DateTime.now(), FirebaseAuth.instance.currentUser!.uid));
     context.read<CategoryBloc>().add(GetCategories());
@@ -139,135 +145,157 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: BlocConsumer<TransactionsBloc, TransactionState>(
+      body: BlocConsumer<UserBloc, UserState>(
         listener: (context, state) {
-          if (state is TransactionLoading) {
+          if (state is UserLoaded) {
+            type = state.user.type!;
+          }
+          if (state is LoadingUser) {
             setState(() {
               transactionsLoading = true;
-            });
-          } else if (state is TransactionsLoaded) {
-            setState(() {
-              transactionsLoading = false;
             });
           }
         },
         builder: (context, state) {
-          if (state is TransactionLoading) {
-            return Center(
-              child: SpinKitFadingCircle(color: context.colorScheme.primary),
-            );
-          }
-          if (state is TransactionsLoaded) {
-            double totalExpenses = 0;
-            double totalRevenues = 0;
-            for (var transaction in state.transactions) {
-              totalExpenses += transaction.expenseAmount!;
-              totalRevenues += transaction.revenueAmount!;
-            }
-            double total = totalRevenues - totalExpenses;
-            return SizedBox(
-              width: size.width,
-              child: Column(
-                children: [
-                  SizedBox(height: constants.tenVertical * 1.5),
-                  //3 Containers of Total , income , expenses
-                  GradientContainer(
-                    height: constants.tenVertical * 7,
-                    width: size.width * 0.95,
-                    title: "Total :",
-                    content: "${total.toString()} DA",
-                    gradientColors: [
-                      context.colorScheme.primary
-                          .withAlpha(100)
-                          .withOpacity(0.3),
-                      context.colorScheme.primary.withOpacity(0.7),
-                    ],
-                    centerContent: true,
-                  ),
-                  SizedBox(height: constants.tenVertical),
-                  SizedBox(
-                    height: constants.tenVertical * 7,
-                    width: size.width * 0.95,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GradientContainer(
-                          height: constants.tenVertical * 7,
-                          width: size.width * 0.45,
-                          title: "Revenues:",
-                          content: "${totalRevenues.toString()} DA",
-                          gradientColors: [
-                            Colors.blue.shade200
-                                .withAlpha(100)
-                                .withOpacity(0.4),
-                            Colors.blue.shade100.withAlpha(200),
-                          ],
-                          centerContent: false,
-                        ),
-                        GradientContainer(
-                          height: constants.tenVertical * 7,
-                          width: size.width * 0.45,
-                          title: "Dépenses",
-                          content: "${totalExpenses.toString()} DA",
-                          gradientColors: [
-                            Colors.red.shade500.withOpacity(0.6),
-                            Colors.red.shade500.withOpacity(0.8),
-                          ],
-                          centerContent: false,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: constants.tenVertical),
-                  //This is the main widget , it shows the transactions of the selected date
-                  Container(
-                      height: size.height * 0.57,
-                      width: size.width * 0.95,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color:
-                            context.colorScheme.onBackground.withOpacity(0.1),
+          return BlocConsumer<TransactionsBloc, TransactionState>(
+            listener: (context, state) {
+              if (state is TransactionLoading) {
+                setState(() {
+                  transactionsLoading = true;
+                });
+              } else if (state is TransactionsLoaded) {
+                setState(() {
+                  transactionsLoading = false;
+                });
+              }
+            },
+            builder: (context, state) {
+              if (state is TransactionLoading) {
+                return Center(
+                  child:
+                      SpinKitFadingCircle(color: context.colorScheme.primary),
+                );
+              }
+              if (state is TransactionsLoaded) {
+                double totalExpenses = 0;
+                double totalRevenues = 0;
+                for (var transaction in state.transactions) {
+                  totalExpenses += transaction.expenseAmount!;
+                  totalRevenues += transaction.revenueAmount!;
+                }
+                double total = totalRevenues - totalExpenses;
+                return SizedBox(
+                  width: size.width,
+                  child: Column(
+                    children: [
+                      SizedBox(height: constants.tenVertical * 1.5),
+                      //3 Containers of Total , income , expenses
+                      GradientContainer(
+                        height: constants.tenVertical * 7,
+                        width: size.width * 0.95,
+                        title: "Total :",
+                        content: "${total.toString()} ${autoTexts.currency}",
+                        gradientColors: [
+                          context.colorScheme.primary
+                              .withAlpha(100)
+                              .withOpacity(0.3),
+                          context.colorScheme.primary.withOpacity(0.7),
+                        ],
+                        centerContent: true,
                       ),
-                      child: state.transactions.isEmpty
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/add_data.png',
-                                    height: size.height * 0.3,
+                      SizedBox(height: constants.tenVertical),
+                      SizedBox(
+                        height: constants.tenVertical * 7.5,
+                        width: size.width * 0.95,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GradientContainer(
+                              height: constants.tenVertical * 7.5,
+                              width: size.width * 0.45,
+                              title: type == 'individual'
+                                  ? '${autoTexts.individualRevenues} :'
+                                  : '${autoTexts.companyRevenues} :',
+                              content:
+                                  "${totalRevenues.toString()} ${autoTexts.currency}",
+                              gradientColors: [
+                                Colors.blue.shade200
+                                    .withAlpha(100)
+                                    .withOpacity(0.4),
+                                Colors.blue.shade100.withAlpha(200),
+                              ],
+                              centerContent: false,
+                            ),
+                            GradientContainer(
+                              height: constants.tenVertical * 7.5,
+                              width: size.width * 0.45,
+                              title: type == 'individual'
+                                  ? '${autoTexts.individualExpenses} :'
+                                  : '${autoTexts.companyExpenses} :',
+                              content:
+                                  "${totalExpenses.toString()} ${autoTexts.currency}",
+                              gradientColors: [
+                                Colors.red.shade500.withOpacity(0.6),
+                                Colors.red.shade500.withOpacity(0.8),
+                              ],
+                              centerContent: false,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: constants.tenVertical),
+                      //This is the main widget , it shows the transactions of the selected date
+                      Container(
+                          height: size.height * 0.57,
+                          width: size.width * 0.95,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: context.colorScheme.onBackground
+                                .withOpacity(0.1),
+                          ),
+                          child: state.transactions.isEmpty
+                              ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/add_data.png',
+                                        height: size.height * 0.3,
+                                      ),
+                                      SizedBox(height: constants.tenVertical),
+                                      Text(
+                                        "Ajouter des expenses et revenues",
+                                        style: TextStyle(
+                                          color: context.colorScheme.outline,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(height: constants.tenVertical),
-                                  Text(
-                                    "Ajouter des expenses et revenues",
-                                    style: TextStyle(
-                                      color: context.colorScheme.outline,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : ListView.separated(
-                              itemCount: state.transactions.length,
-                              itemBuilder: (context, index) {
-                                return TransactionCard(
-                                  transaction: state.transactions[index],
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return SizedBox(height: constants.tenVertical);
-                              },
-                            )),
-                ],
-              ),
-            );
-          } else {
-            context.read<TransactionsBloc>().add(LoadFilteredTransactions(
-                DateTime.now(), FirebaseAuth.instance.currentUser!.uid));
-            return Container();
-          }
+                                )
+                              : ListView.separated(
+                                  itemCount: state.transactions.length,
+                                  itemBuilder: (context, index) {
+                                    return TransactionCard(
+                                      transaction: state.transactions[index],
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return SizedBox(
+                                        height: constants.tenVertical);
+                                  },
+                                )),
+                    ],
+                  ),
+                );
+              } else {
+                context.read<TransactionsBloc>().add(LoadFilteredTransactions(
+                    DateTime.now(), FirebaseAuth.instance.currentUser!.uid));
+                return Container();
+              }
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

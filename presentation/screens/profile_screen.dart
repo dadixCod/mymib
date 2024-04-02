@@ -3,13 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:mymib/generated/l10n.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_bloc.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_event.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_state.dart';
 import 'package:mymib/logic/blocs/user_bloc/user_bloc.dart';
 import 'package:mymib/logic/blocs/user_bloc/user_event.dart';
 import 'package:mymib/logic/blocs/user_bloc/user_state.dart';
-import 'package:easy_url_launcher/easy_url_launcher.dart';
+import 'package:mymib/presentation/widgets/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -19,37 +21,54 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late String selectedLanguage;
+  @override
+  void initState() {
+    context.read<UserBloc>().add(LoadUser());
+    selectedLanguage = 'fr';
+    super.initState();
+  }
+
   var isLoading = false;
   var userLoading = false;
+  void saveSelectedLanguage(String languageCode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedLanguage', languageCode);
+  }
+
+  void updateAppLanguage(String languageCode) {
+    S.load(Locale(languageCode));
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = context.deviceSize;
     Constants constants = Constants(deviseSize: size);
+    final autoTexts = S.of(context);
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Profile",
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-            ),
+      appBar: AppBar(
+        title: const Text(
+          "Profile",
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
           ),
-          centerTitle: true,
         ),
-        body: BlocConsumer<UserBloc, UserState>(
-          listener: (context, state) {
-            if (state is LoadingUser) {
-              userLoading = state.isLoading;
-            } else if (state is FailedUserLoading) {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    content: Text(state.errorMessage),
-                  );
-                },
-              );
-            }
-          },
+        centerTitle: true,
+      ),
+      body: BlocListener<UserBloc, UserState>(
+        listener: (context, state) {
+          if (state is FailedUserLoading) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text(state.errorMessage),
+                );
+              },
+            );
+          }
+        },
+        child: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
             if (state is UserLoaded) {
               return Padding(
@@ -64,47 +83,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ProfileInfoContainer(
-                            title: "Nom d'utilisateur: ",
+                            title:
+                                "${autoTexts.username.replaceFirst("'", "")}: ",
                             content: state.user.displayName!,
+                            selectedLanguage: selectedLanguage,
                           ),
                           SizedBox(height: constants.tenVertical),
                           ProfileInfoContainer(
-                            title: 'Email: ',
+                            title: '${autoTexts.email}: ',
                             content: state.user.email!,
+                            selectedLanguage: selectedLanguage,
                           ),
                           SizedBox(height: constants.tenVertical),
                           ProfileInfoContainer(
-                            title: 'Type: ',
-                            content: state.user.type!,
+                            title: '${autoTexts.type}: ',
+                            content: state.user.type! == 'individual'
+                                ? autoTexts.individual
+                                : autoTexts.company,
+                            selectedLanguage: selectedLanguage,
                           ),
                           SizedBox(height: constants.tenVertical * 4),
-                          const Text(
-                            'Contactez -nous',
-                            style: TextStyle(
+                          Text(
+                            autoTexts.your_categories,
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(height: constants.tenVertical * 2),
                           ContactContainer(
-                            onTap: () async {
-                              await EasyLauncher.email(
-                                  email: 'mymibsolution@gmail.com');
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                '/edit_categories',
+                                arguments: true,
+                              );
                             },
-                            icon: Icons.mail_outline_outlined,
-                            text: 'Email',
-                            backgroundColor:
-                                context.colorScheme.secondaryContainer,
+                            icon: Image.asset(
+                              'assets/icons/income.png',
+                              color: context.colorScheme.background,
+                            ),
+                            text: state.user.type! == 'individual'
+                                ? autoTexts.individualRevenues
+                                : autoTexts.companyRevenues,
+                            backgroundColor: Colors.blueAccent.shade100,
                           ),
                           SizedBox(height: constants.tenVertical * 2),
                           ContactContainer(
-                            onTap: () async {
-                              await EasyLauncher.call(number: '0655741903');
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                '/edit_categories',
+                                arguments: false,
+                              );
                             },
-                            icon: Icons.phone,
-                            text: 'Appeler nous',
+                            icon: Image.asset(
+                              'assets/icons/expense.png',
+                              color: context.colorScheme.background,
+                            ),
+                            text: state.user.type! == 'individual'
+                                ? autoTexts.individualExpenses
+                                : autoTexts.companyExpenses,
                             backgroundColor:
-                                context.colorScheme.tertiaryContainer,
+                                context.colorScheme.primary.withAlpha(200),
+                          ),
+                          SizedBox(height: constants.tenVertical * 2),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                autoTexts.selectedLangue,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                textDirection: selectedLanguage == 'ar'
+                                    ? TextDirection.rtl
+                                    : TextDirection.ltr,
+                              ),
+                              DropdownButton<String>(
+                                  value: selectedLanguage,
+                                  items: <String>['fr', 'en', 'ar']
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) => DropdownMenuItem(
+                                              value: value, child: Text(value)))
+                                      .toList(),
+                                  onChanged: (String? newValue) {
+                                    if (newValue != null) {
+                                      setState(() {
+                                        selectedLanguage = newValue;
+                                      });
+                                      saveSelectedLanguage(newValue);
+                                      updateAppLanguage(newValue);
+                                    }
+                                    return;
+                                  })
+                            ],
                           ),
                         ],
                       ),
@@ -147,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           .withOpacity(0.8),
                                     )
                                   : Text(
-                                      "Déconnexion",
+                                      autoTexts.signout,
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -163,178 +235,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               );
-            } else {
-              context.read<UserBloc>().add(LoadUser());
-              return SpinKitFadingCircle(
-                color: context.colorScheme.primary,
+            } else if (state is LoadingUser) {
+              return Center(
+                child: SpinKitFadingCircle(
+                  color: context.colorScheme.primary,
+                ),
               );
+            } else {
+              return Container();
             }
           },
-        ));
-  }
-}
-
-class ContactContainer extends StatelessWidget {
-  const ContactContainer({
-    super.key,
-    this.onTap,
-    required this.icon,
-    required this.text,
-    required this.backgroundColor,
-  });
-  final void Function()? onTap;
-  final IconData icon;
-  final String text;
-  final Color backgroundColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final Size size = context.deviceSize;
-    Constants constants = Constants(deviseSize: size);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: size.width,
-        height: constants.tenVertical * 5,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 20,
-            )
-          ],
         ),
       ),
     );
   }
 }
-
-class ProfileInfoContainer extends StatelessWidget {
-  const ProfileInfoContainer({
-    super.key,
-    required this.title,
-    required this.content,
-  });
-
-  final String title;
-  final String content;
-
-  @override
-  Widget build(BuildContext context) {
-    final size = context.deviceSize;
-    Constants constants = Constants(deviseSize: size);
-    return Container(
-      width: size.width,
-      height: constants.tenVertical * 5,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        color: context.colorScheme.outline.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          Text(
-            content,
-            style: const TextStyle(
-              fontSize: 18,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-
-      // body: Column(
-      //   children: [
-      //     Expanded(
-      //       child: Container(
-      //         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      //         child: Center(
-      //           child: Column(
-      //             children: [
-      //               Text(''),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //     BlocConsumer<AuthBloc, AuthState>(
-      //       listener: (context, state) {
-      //         if (state is AuthSuccessSignOutState) {
-      //           Navigator.of(context).pushReplacementNamed('/log_in');
-      //         }
-      //         if (state is AuthLoadingState) {
-      //           isLoading = state.isLoading;
-      //         } else if (state is AuthFailureState) {
-      //           showDialog(
-      //             context: context,
-      //             builder: (context) {
-      //               return AlertDialog(
-      //                 content: Text(state.errorMessage),
-      //               );
-      //             },
-      //           );
-      //         }
-      //       },
-      //       builder: (context, state) {
-      //         return GestureDetector(
-      //           onTap: () {
-      //             context.read<AuthBloc>().add(SignOut());
-      //           },
-      //           child: Container(
-      //             width: size.width,
-      //             height: constants.tenVertical * 5,
-      //             margin: const EdgeInsets.symmetric(horizontal: 15),
-      //             decoration: BoxDecoration(
-      //               borderRadius: BorderRadius.circular(15),
-      //               color: context.colorScheme.outline,
-      //             ),
-      //             child: Center(
-      //               child: isLoading
-      //                   ? SpinKitFadingCircle(
-      //                       color:
-      //                           context.colorScheme.background.withOpacity(0.8),
-      //                     )
-      //                   : Text(
-      //                       "Sign out",
-      //                       style: TextStyle(
-      //                         fontSize: 20,
-      //                         fontWeight: FontWeight.bold,
-      //                         color: context.colorScheme.background
-      //                             .withOpacity(0.8),
-      //                       ),
-      //                     ),
-      //             ),
-      //           ),
-      //         );
-      //       },
-      //     ),
-      //   ],
-      // ),
