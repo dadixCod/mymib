@@ -101,9 +101,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             Icons.arrow_back_ios_rounded,
           ),
         ),
-        title: const Text(
-          'Transaction',
-          style: TextStyle(
+        title: Text(
+          autoTexts.addTransaction,
+          style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w500,
           ),
@@ -221,6 +221,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                                     },
                                   ),
                                   true,
+                                  autoTexts,
                                 );
                               },
                               amount: revenuesAmountController,
@@ -252,6 +253,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                                     },
                                   ),
                                   false,
+                                  autoTexts,
                                 );
                               },
                               amount: expensesAmountController,
@@ -292,9 +294,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                               expAmount = 0.0;
                             } else if (revAmount == null && expAmount == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          "Remplir au moins un des montants")));
+                                SnackBar(
+                                  content: Text(autoTexts.transactionValidator),
+                                ),
+                              );
                               return;
                             }
                             final String revNote =
@@ -329,7 +332,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                                   color: context.colorScheme.surface,
                                 )
                               : Text(
-                                  'Enregistrer',
+                                  autoTexts.save,
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
@@ -351,6 +354,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     Size size,
     Widget widget,
     bool isRev,
+    S autoTexts,
   ) {
     return showModalBottomSheet(
       context: context,
@@ -379,16 +383,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     color: context.colorScheme.background,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.edit_rounded,
                         size: 22,
                       ),
                       Text(
-                        "Editer",
-                        style: TextStyle(
+                        autoTexts.edit,
+                        style: const TextStyle(
                           fontWeight: FontWeight.w500,
                         ),
                       ),

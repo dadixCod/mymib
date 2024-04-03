@@ -22,22 +22,44 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "acceuil": MessageLookupByLibrary.simpleMessage("الصفحة الرئيسية"),
+        "addNewTransactions":
+            MessageLookupByLibrary.simpleMessage("أضف معاملات جديدة"),
+        "addTransaction": MessageLookupByLibrary.simpleMessage("أضف معاملة"),
+        "amountInDa": MessageLookupByLibrary.simpleMessage("المبلغ (دج)"),
+        "basicOption": MessageLookupByLibrary.simpleMessage("الخيار الأساسي "),
+        "basicOptionOne":
+            MessageLookupByLibrary.simpleMessage("الخيار الأساسي 1"),
+        "callUs": MessageLookupByLibrary.simpleMessage("اتصل بنا"),
+        "category": MessageLookupByLibrary.simpleMessage("الفئة"),
         "company": MessageLookupByLibrary.simpleMessage("شركة"),
         "companyExpenses": MessageLookupByLibrary.simpleMessage("المصروفات"),
         "companyRevenues": MessageLookupByLibrary.simpleMessage("الإيرادات"),
+        "confirmDeleteCategorie":
+            MessageLookupByLibrary.simpleMessage("هل ترغب في حذف هذه الفئة؟"),
         "confirmDeleteTransaction": MessageLookupByLibrary.simpleMessage(
             "هل ترغب في حذف هذه المعاملة؟"),
+        "contact": MessageLookupByLibrary.simpleMessage("جهات الاتصال"),
         "contineWith": MessageLookupByLibrary.simpleMessage("أو تابع مع"),
         "continueText": MessageLookupByLibrary.simpleMessage("استمر"),
         "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
         "currency": MessageLookupByLibrary.simpleMessage("دج"),
+        "date": MessageLookupByLibrary.simpleMessage("تاريخ"),
         "didHaveAccount": MessageLookupByLibrary.simpleMessage("هل لديك حساب؟"),
         "didNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
+        "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
+        "editTransaction":
+            MessageLookupByLibrary.simpleMessage("تعديل المعاملة"),
         "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
+        "emptyCategoriesList":
+            MessageLookupByLibrary.simpleMessage("هذه القائمة من الفئات فارغة"),
+        "emptyCategory": MessageLookupByLibrary.simpleMessage("الفئة فارغة"),
         "emptyEmail": MessageLookupByLibrary.simpleMessage(
             "يجب ألا يكون البريد الإلكتروني فارغًا"),
         "getStarted": MessageLookupByLibrary.simpleMessage("ابدأ"),
+        "headlineBasic": MessageLookupByLibrary.simpleMessage(
+            "قل وداعًا للإدخال اليدوي وقم بتحسين أوضاعك المالية!"),
         "individual": MessageLookupByLibrary.simpleMessage("فرد"),
         "individualExpenses": MessageLookupByLibrary.simpleMessage("المصروفات"),
         "individualRevenues": MessageLookupByLibrary.simpleMessage("الدخل"),
@@ -51,6 +73,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "monthly": MessageLookupByLibrary.simpleMessage("شهري"),
         "next": MessageLookupByLibrary.simpleMessage("التالي"),
         "no": MessageLookupByLibrary.simpleMessage("لا"),
+        "noTransactions": MessageLookupByLibrary.simpleMessage(
+            "لا توجد معاملات في هذا اليوم."),
+        "note": MessageLookupByLibrary.simpleMessage("ملاحظة"),
+        "ok": MessageLookupByLibrary.simpleMessage("حسناً"),
         "page1Desc": MessageLookupByLibrary.simpleMessage(
             "My MIB هو حلاً ثورياً لإدارة المال يتيح لك السيطرة على أمورك المالية وتحقيق أحلامك"),
         "page2Desc": MessageLookupByLibrary.simpleMessage(
@@ -58,13 +84,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "page3Desc": MessageLookupByLibrary.simpleMessage(
             "تصور وضعك المالي بلمحة واحدة وقلل من نفقاتك. استفد من العروض الحصرية من شركائنا لتوفير على مشترياتك اليومية."),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+        "premium": MessageLookupByLibrary.simpleMessage("مميز"),
         "prev": MessageLookupByLibrary.simpleMessage("السابق"),
+        "pricing": MessageLookupByLibrary.simpleMessage("د.ج/شهر"),
+        "profile": MessageLookupByLibrary.simpleMessage("الملف الشخصي"),
+        "restartApp": MessageLookupByLibrary.simpleMessage(
+            "أعد تشغيل التطبيق لتطبيق جميع التغييرات"),
+        "save": MessageLookupByLibrary.simpleMessage("حفظ"),
         "selectedLangue": MessageLookupByLibrary.simpleMessage("اللغة"),
         "signout": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
         "signup": MessageLookupByLibrary.simpleMessage("التسجيل"),
         "signupDesc":
             MessageLookupByLibrary.simpleMessage("نحن سعداء بوجودك معنا"),
+        "solutionOption": MessageLookupByLibrary.simpleMessage("الخيار الحل"),
+        "solutionOptionTwo":
+            MessageLookupByLibrary.simpleMessage("الخيار 2 الحل"),
+        "stats": MessageLookupByLibrary.simpleMessage("الإحصائيات"),
         "title": MessageLookupByLibrary.simpleMessage("My MIB"),
+        "topMib": MessageLookupByLibrary.simpleMessage("أفضل MIB"),
+        "total": MessageLookupByLibrary.simpleMessage("المجموع"),
+        "transactionValidator": MessageLookupByLibrary.simpleMessage(
+            "يرجى ملء واحد على الأقل من المبالغ"),
         "type": MessageLookupByLibrary.simpleMessage("النوع"),
         "username": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
         "weekly": MessageLookupByLibrary.simpleMessage("أسبوعي"),

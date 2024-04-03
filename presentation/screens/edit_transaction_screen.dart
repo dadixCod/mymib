@@ -111,9 +111,9 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             Icons.arrow_back_ios_rounded,
           ),
         ),
-        title: const Text(
-          'Editer la transaction',
-          style: TextStyle(
+        title: Text(
+          autoTexts.editTransaction,
+          style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w500,
           ),

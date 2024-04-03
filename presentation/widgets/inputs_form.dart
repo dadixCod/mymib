@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mymib/core/constants/constants.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:mymib/generated/l10n.dart';
 import 'package:mymib/presentation/widgets/row_text_field.dart';
 
 class InputsForm extends StatefulWidget {
@@ -30,13 +31,14 @@ class _InputsFormState extends State<InputsForm> {
   Widget build(BuildContext context) {
     final size = context.deviceSize;
     Constants constants = Constants(deviseSize: size);
+    final autoTexts = S.of(context);
     return Form(
       key: widget.formKey,
       child: Column(
         children: [
           RowTextField(
             controller: widget.dateController,
-            text: 'Date',
+            text: autoTexts.date,
             hint: '09/10/2024',
             enabled: false,
             defaultData: widget.dateController.text,
@@ -64,13 +66,13 @@ class _InputsFormState extends State<InputsForm> {
           ),
           RowTextField(
             controller: widget.amount,
-            text: 'Montant (en D.A)',
+            text: autoTexts.amountInDa,
             hint: '0.00',
             keyboardType: TextInputType.number,
           ),
           RowTextField(
             controller: widget.category,
-            text: 'Category',
+            text: autoTexts.category,
             hint: 'Autre',
             defaultData: widget.category.text,
             enabled: false,
@@ -83,8 +85,8 @@ class _InputsFormState extends State<InputsForm> {
           ),
           RowTextField(
             controller: widget.note,
-            text: 'Note',
-            hint: 'Note',
+            text: autoTexts.note,
+            hint: autoTexts.note,
           ),
           SizedBox(height: constants.tenVertical * 5),
         ],

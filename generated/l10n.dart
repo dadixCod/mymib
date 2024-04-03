@@ -459,6 +459,306 @@ class S {
       args: [],
     );
   }
+
+  /// `Relaunch the application for all changes to take effect`
+  String get restartApp {
+    return Intl.message(
+      'Relaunch the application for all changes to take effect',
+      name: 'restartApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home`
+  String get acceuil {
+    return Intl.message(
+      'Home',
+      name: 'acceuil',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Statistics`
+  String get stats {
+    return Intl.message(
+      'Statistics',
+      name: 'stats',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Premium`
+  String get premium {
+    return Intl.message(
+      'Premium',
+      name: 'premium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile`
+  String get profile {
+    return Intl.message(
+      'Profile',
+      name: 'profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add new transactions`
+  String get addNewTransactions {
+    return Intl.message(
+      'Add new transactions',
+      name: 'addNewTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total`
+  String get total {
+    return Intl.message(
+      'Total',
+      name: 'total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No transactions on this day.`
+  String get noTransactions {
+    return Intl.message(
+      'No transactions on this day.',
+      name: 'noTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Category`
+  String get category {
+    return Intl.message(
+      'Category',
+      name: 'category',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get save {
+    return Intl.message(
+      'Save',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit`
+  String get edit {
+    return Intl.message(
+      'Edit',
+      name: 'edit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This list of categories is empty`
+  String get emptyCategoriesList {
+    return Intl.message(
+      'This list of categories is empty',
+      name: 'emptyCategoriesList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to delete this category?`
+  String get confirmDeleteCategorie {
+    return Intl.message(
+      'Do you want to delete this category?',
+      name: 'confirmDeleteCategorie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Category is empty`
+  String get emptyCategory {
+    return Intl.message(
+      'Category is empty',
+      name: 'emptyCategory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Okay`
+  String get ok {
+    return Intl.message(
+      'Okay',
+      name: 'ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add a Transaction`
+  String get addTransaction {
+    return Intl.message(
+      'Add a Transaction',
+      name: 'addTransaction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit transaction`
+  String get editTransaction {
+    return Intl.message(
+      'Edit transaction',
+      name: 'editTransaction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fill in at least one of the amounts`
+  String get transactionValidator {
+    return Intl.message(
+      'Fill in at least one of the amounts',
+      name: 'transactionValidator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Call us `
+  String get callUs {
+    return Intl.message(
+      'Call us ',
+      name: 'callUs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date`
+  String get date {
+    return Intl.message(
+      'Date',
+      name: 'date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount (AD)`
+  String get amountInDa {
+    return Intl.message(
+      'Amount (AD)',
+      name: 'amountInDa',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Note`
+  String get note {
+    return Intl.message(
+      'Note',
+      name: 'note',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contacts`
+  String get contact {
+    return Intl.message(
+      'Contacts',
+      name: 'contact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Basic Option 1`
+  String get basicOptionOne {
+    return Intl.message(
+      'Basic Option 1',
+      name: 'basicOptionOne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solution Option 2`
+  String get solutionOptionTwo {
+    return Intl.message(
+      'Solution Option 2',
+      name: 'solutionOptionTwo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Basic Option`
+  String get basicOption {
+    return Intl.message(
+      'Basic Option',
+      name: 'basicOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solution Option`
+  String get solutionOption {
+    return Intl.message(
+      'Solution Option',
+      name: 'solutionOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AD/month`
+  String get pricing {
+    return Intl.message(
+      'AD/month',
+      name: 'pricing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Say goodbye to manual entry and optimize your finances!`
+  String get headlineBasic {
+    return Intl.message(
+      'Say goodbye to manual entry and optimize your finances!',
+      name: 'headlineBasic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Top MIB`
+  String get topMib {
+    return Intl.message(
+      'Top MIB',
+      name: 'topMib',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

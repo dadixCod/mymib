@@ -44,9 +44,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     final autoTexts = S.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Statistiques',
-          style: TextStyle(
+        title: Text(
+          autoTexts.stats,
+          style: const TextStyle(
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -210,48 +210,37 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                 ),
                                 SizedBox(
                                   height: deviseSize.height * 0.8,
-                                  child: revenuesTotal == 0 ||
-                                          expensesTotal == 0
-                                      ? SizedBox(
-                                          height: deviseSize.height * 0.4,
-                                          width: deviseSize.width * 0.8,
-                                          child: Center(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                  child:
+                                      revenuesTotal == 0 && expensesTotal == 0
+                                          ? EmptyTransactions(
+                                              deviseSize: deviseSize,
+                                              autoTexts: autoTexts)
+                                          : TabBarView(
                                               children: [
-                                                Image.asset(
-                                                  'assets/images/add_data.png',
-                                                ),
-                                                SizedBox(
-                                                  height:
-                                                      deviseSize.height * 0.02,
-                                                ),
-                                                const Text(
-                                                  'Aucune transaction ce jour-là.',
-                                                )
+                                                revenuesTotal == 0
+                                                    ? EmptyTransactions(
+                                                        deviseSize: deviseSize,
+                                                        autoTexts: autoTexts)
+                                                    : StatisticsView(
+                                                        deviseSize: deviseSize,
+                                                        categories: state
+                                                            .revenuesStatistics,
+                                                        isExpensesList: false,
+                                                        amount: revenuesTotal,
+                                                      ),
+                                                expensesTotal == 0
+                                                    ? EmptyTransactions(
+                                                        deviseSize: deviseSize,
+                                                        autoTexts: autoTexts)
+                                                    : StatisticsView(
+                                                        deviseSize: deviseSize,
+                                                        categories: state
+                                                            .expensesStatistics,
+                                                        isExpensesList: true,
+                                                        amount: expensesTotal,
+                                                      ),
                                               ],
                                             ),
-                                          ),
-                                        )
-                                      : TabBarView(
-                                          children: [
-                                            StatisticsView(
-                                              deviseSize: deviseSize,
-                                              categories:
-                                                  state.revenuesStatistics,
-                                              isExpensesList: false,
-                                              amount: revenuesTotal,
-                                            ),
-                                            StatisticsView(
-                                              deviseSize: deviseSize,
-                                              categories:
-                                                  state.expensesStatistics,
-                                              isExpensesList: true,
-                                              amount: expensesTotal,
-                                            ),
-                                          ],
-                                        ),
                                 )
                               ],
                             ),
@@ -267,6 +256,42 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class EmptyTransactions extends StatelessWidget {
+  const EmptyTransactions({
+    super.key,
+    required this.deviseSize,
+    required this.autoTexts,
+  });
+
+  final Size deviseSize;
+  final S autoTexts;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: deviseSize.height * 0.4,
+      width: deviseSize.width * 0.8,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/add_data.png',
+              height: deviseSize.height * 0.35,
+            ),
+            SizedBox(
+              height: deviseSize.height * 0.02,
+            ),
+            Text(
+              autoTexts.noTransactions,
+            )
+          ],
+        ),
       ),
     );
   }

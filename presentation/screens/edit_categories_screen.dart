@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mymib/core/utils/extensions.dart';
 import 'package:mymib/data/models/category.dart';
+import 'package:mymib/generated/l10n.dart';
 import 'package:mymib/logic/blocs/categories_bloc.dart/bloc/category_bloc.dart';
 import 'package:mymib/presentation/widgets/fancy_rounded_button.dart';
 import 'package:mymib/presentation/widgets/row_text_field.dart';
@@ -31,10 +32,10 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final size = context.deviceSize;
-
+    final autoTexts = S.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editer les categories"),
+        title: Text(autoTexts.edit),
         centerTitle: true,
       ),
       body: BlocConsumer<CategoryBloc, CategoryState>(
@@ -47,8 +48,8 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
             height: size.height * 0.8,
             width: size.width,
             child: listToShow.isEmpty
-                ? const Center(
-                    child: Text("Cette catégorie est vide"),
+                ? Center(
+                    child: Text(autoTexts.emptyCategoriesList),
                   )
                 : ListView.separated(
                     itemBuilder: (context, index) {
@@ -75,8 +76,8 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
                             await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
-                                content: const Text(
-                                  "Voulez - vous supprimer cette catégorie?",
+                                content: Text(
+                                  autoTexts.confirmDeleteCategorie,
                                 ),
                                 actions: [
                                   TextButton(
@@ -84,7 +85,7 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
                                       Navigator.of(context).pop();
                                     },
                                     child: Text(
-                                      "Non",
+                                      autoTexts.no,
                                       style:
                                           context.textTheme.bodyLarge?.copyWith(
                                               // color: context.colorScheme.error,
@@ -110,7 +111,7 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
                                       Navigator.of(context).pop();
                                     },
                                     child: Text(
-                                      "Oui",
+                                      autoTexts.yes,
                                       style:
                                           context.textTheme.bodyLarge?.copyWith(
                                         color: context.colorScheme.error,
@@ -127,8 +128,14 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
                           trailing: IconButton(
                             onPressed: () {
                               categoryController.text = category.category;
-                              addEditCategory(context, size, categoryController,
-                                  true, category);
+                              addEditCategory(
+                                context,
+                                size,
+                                categoryController,
+                                true,
+                                category,
+                                autoTexts,
+                              );
                             },
                             icon: Icon(
                               Icons.edit,
@@ -161,6 +168,7 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
             categoryController,
             false,
             null,
+            autoTexts,
           );
         },
         child: const Icon(
@@ -170,8 +178,13 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
     );
   }
 
-  Future<Object?> addEditCategory(BuildContext context, Size size,
-      TextEditingController controller, bool edit, Category? category) {
+  Future<Object?> addEditCategory(
+      BuildContext context,
+      Size size,
+      TextEditingController controller,
+      bool edit,
+      Category? category,
+      S autoTexts) {
     return showGeneralDialog(
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         Tween<Offset> tween;
@@ -209,8 +222,8 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
                     children: [
                       RowTextField(
                         controller: categoryController,
-                        text: 'Category',
-                        hint: 'category',
+                        text: autoTexts.category,
+                        hint: autoTexts.category,
                       ),
                       FancyRoundedButton(
                         onTap: () {
@@ -218,13 +231,15 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: const Text('Categorie est vide'),
+                                title: Text(autoTexts.emptyCategory),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: const Text("Ok"),
+                                    child: Text(
+                                      autoTexts.ok.replaceFirst("'", ""),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -255,7 +270,7 @@ class _EditCategoriesScreenState extends State<EditCategoriesScreen> {
                         },
                         color: context.colorScheme.primary,
                         child: Text(
-                          'Enregistrer',
+                          autoTexts.save,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500,

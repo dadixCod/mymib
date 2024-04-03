@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:mymib/generated/l10n.dart';
 import 'package:mymib/logic/blocs/user_bloc/user_bloc.dart';
 import 'package:mymib/logic/blocs/user_bloc/user_event.dart';
 import 'package:mymib/logic/blocs/user_bloc/user_state.dart';
@@ -25,11 +26,12 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final autoTexts = S.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Premium",
-          style: TextStyle(
+        title: Text(
+          autoTexts.premium,
+          style: const TextStyle(
             fontWeight: FontWeight.w500,
           ),
         ),

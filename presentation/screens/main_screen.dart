@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:mymib/generated/l10n.dart';
 import 'package:mymib/logic/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:mymib/presentation/screens/home_screen.dart';
 import 'package:mymib/presentation/screens/premium_sceen.dart';
@@ -30,6 +31,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final autoTexts = S.of(context);
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return Scaffold(
@@ -48,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
             items: [
               BottomNavigationBarItem(
                 // backgroundColor: Colors.transparent,
-                label: 'Acceuil',
+                label: autoTexts.acceuil,
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 4),
                   child: Image.asset(
@@ -70,7 +72,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               BottomNavigationBarItem(
                 // backgroundColor: Colors.transparent,
-                label: 'statistiques',
+                label: autoTexts.stats,
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 4),
                   child: Image.asset(
@@ -92,7 +94,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               BottomNavigationBarItem(
                 // backgroundColor: Colors.transparent,
-                label: 'Premium',
+                label: autoTexts.premium,
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 4),
                   child: Image.asset(
@@ -114,7 +116,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               BottomNavigationBarItem(
                 // backgroundColor: Colors.transparent,
-                label: 'profile',
+                label: autoTexts.profile,
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 4),
                   child: Image.asset(

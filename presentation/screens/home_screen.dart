@@ -191,9 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: constants.tenVertical * 1.5),
                       //3 Containers of Total , income , expenses
                       GradientContainer(
-                        height: constants.tenVertical * 7,
+                        height: constants.tenVertical * 7.5,
                         width: size.width * 0.95,
-                        title: "Total :",
+                        title: "${autoTexts.total} :",
                         content: "${total.toString()} ${autoTexts.currency}",
                         gradientColors: [
                           context.colorScheme.primary
@@ -246,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: constants.tenVertical),
                       //This is the main widget , it shows the transactions of the selected date
                       Container(
-                          height: size.height * 0.57,
+                          height: size.height * 0.56,
                           width: size.width * 0.95,
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 10),
@@ -266,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       SizedBox(height: constants.tenVertical),
                                       Text(
-                                        "Ajouter des expenses et revenues",
+                                        autoTexts.addNewTransactions,
                                         style: TextStyle(
                                           color: context.colorScheme.outline,
                                         ),

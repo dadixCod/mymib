@@ -13,6 +13,8 @@ import 'package:mymib/logic/blocs/user_bloc/user_state.dart';
 import 'package:mymib/presentation/widgets/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../logic/blocs/categories_bloc.dart/bloc/category_bloc.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -21,11 +23,23 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late String selectedLanguage;
+  late String selectedLanguage = 'fr';
+  bool isChangedLanguage = false;
+  void setLanguage() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    String? savedLanguage = _prefs.getString('selectedLanguage');
+    if (savedLanguage != null) {
+      selectedLanguage = savedLanguage;
+    } else {
+      selectedLanguage = '';
+    }
+  }
+
   @override
   void initState() {
     context.read<UserBloc>().add(LoadUser());
-    selectedLanguage = 'fr';
+    context.read<CategoryBloc>().add(GetCategories());
+    setLanguage();
     super.initState();
   }
 
@@ -47,9 +61,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final autoTexts = S.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Profile",
-          style: TextStyle(
+        title: Text(
+          autoTexts.profile,
+          style: const TextStyle(
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -160,24 +174,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     : TextDirection.ltr,
                               ),
                               DropdownButton<String>(
-                                  value: selectedLanguage,
-                                  items: <String>['fr', 'en', 'ar']
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) => DropdownMenuItem(
-                                              value: value, child: Text(value)))
-                                      .toList(),
-                                  onChanged: (String? newValue) {
-                                    if (newValue != null) {
-                                      setState(() {
-                                        selectedLanguage = newValue;
-                                      });
-                                      saveSelectedLanguage(newValue);
-                                      updateAppLanguage(newValue);
-                                    }
-                                    return;
-                                  })
+                                value: selectedLanguage,
+                                items: <String>['fr', 'en', 'ar']
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) => DropdownMenuItem(
+                                            value: value, child: Text(value)))
+                                    .toList(),
+                                onChanged: (String? newValue) {
+                                  if (newValue != null) {
+                                    setState(() {
+                                      selectedLanguage = newValue;
+                                      isChangedLanguage = true;
+                                    });
+                                    saveSelectedLanguage(newValue);
+                                    updateAppLanguage(newValue);
+                                  }
+                                  return;
+                                },
+                              ),
                             ],
                           ),
+                          isChangedLanguage
+                              ? Text(
+                                  autoTexts.restartApp,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: context.colorScheme.error,
+                                  ),
+                                )
+                              : SizedBox(),
                         ],
                       ),
                     ),

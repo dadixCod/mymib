@@ -63,7 +63,7 @@ class StatisticsView extends StatelessWidget {
           height: deviseSize.height * 0.4,
           width: deviseSize.width,
           padding: const EdgeInsets.symmetric(vertical: 30),
-          color: context.colorScheme.primaryContainer.withOpacity(0.3),
+          color: context.colorScheme.onBackground.withOpacity(0.1),
           child: Center(
             child: PieChart(
               PieChartData(
@@ -119,7 +119,7 @@ class StatisticsView extends StatelessWidget {
                   width: deviseSize.width,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  color: context.colorScheme.primaryContainer.withOpacity(0.4),
+                  color: context.colorScheme.onBackground.withOpacity(0.1),
                   child: Row(
                     children: [
                       Container(
