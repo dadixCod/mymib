@@ -68,13 +68,13 @@ class _IndividualPremiumState extends State<IndividualPremium> {
                 children: [
                   OfferCard(
                     headline: autoTexts.headlineBasic,
-                    optionTitle: autoTexts.basicOptionOne,
+                    optionTitle: autoTexts.basicOption,
                     price: '390 ${autoTexts.pricing}',
                     list: basicOptionsOne,
                   ),
                   SizedBox(height: constants.tenVertical * 3),
                   OfferCard(
-                    optionTitle: autoTexts.solutionOptionTwo,
+                    optionTitle: autoTexts.solutionOption,
                     price: '990 ${autoTexts.pricing}',
                     height: deviseSize.height * 0.35,
                     listHight: deviseSize.height * 0.3,

@@ -690,40 +690,20 @@ class S {
     );
   }
 
-  /// `Basic Option 1`
-  String get basicOptionOne {
-    return Intl.message(
-      'Basic Option 1',
-      name: 'basicOptionOne',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Solution Option 2`
-  String get solutionOptionTwo {
-    return Intl.message(
-      'Solution Option 2',
-      name: 'solutionOptionTwo',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Basic Option`
+  /// `Basic`
   String get basicOption {
     return Intl.message(
-      'Basic Option',
+      'Basic',
       name: 'basicOption',
       desc: '',
       args: [],
     );
   }
 
-  /// `Solution Option`
+  /// `The Solution`
   String get solutionOption {
     return Intl.message(
-      'Solution Option',
+      'The Solution',
       name: 'solutionOption',
       desc: '',
       args: [],
@@ -755,6 +735,36 @@ class S {
     return Intl.message(
       'Top MIB',
       name: 'topMib',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AD/3 months`
+  String get pricingPerTr {
+    return Intl.message(
+      'AD/3 months',
+      name: 'pricingPerTr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For small businesses`
+  String get forSmallBusiness {
+    return Intl.message(
+      'For small businesses',
+      name: 'forSmallBusiness',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For medium and large companies`
+  String get forBigCompanies {
+    return Intl.message(
+      'For medium and large companies',
+      name: 'forBigCompanies',
       desc: '',
       args: [],
     );

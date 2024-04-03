@@ -63,11 +63,12 @@
     "amountInDa": "Montant (DA)",
     "note": "Note",
     "contact": "Contacts",
-    "basicOptionOne": "Option 1 Basique",
-    "solutionOptionTwo": "Option 2 La Solution",
-    "basicOption": "Option Basique",
-    "solutionOption": "Option La Solution",
+    "basicOption": "Basique",
+    "solutionOption": "La Solution",
     "pricing": "DA/mois",
     "headlineBasic": "Dites adieu à la saisie manuelle et optimisez vos finances !",
-    "topMib": "Top MIB"
+    "topMib": "Top MIB",
+    "pricingPerTr": "DA/3 mois",
+    "forSmallBusiness": "Pour un petit commerce",
+    "forBigCompanies": "Pour moyennes et grandes entreprises"
 }

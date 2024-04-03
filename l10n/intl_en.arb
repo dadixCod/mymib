@@ -63,11 +63,12 @@
     "amountInDa": "Amount (AD)",
     "note": "Note",
     "contact": "Contacts",
-    "basicOptionOne": "Basic Option 1",
-    "solutionOptionTwo": "Solution Option 2",
-    "basicOption": "Basic Option",
-    "solutionOption": "Solution Option",
+    "basicOption": "Basic",
+    "solutionOption": "The Solution",
     "pricing": "AD/month",
-    "headlineBasic": "Say goodbye to manual entry and optimize your finances!"
-    ,"topMib":"Top MIB"
+    "headlineBasic": "Say goodbye to manual entry and optimize your finances!",
+    "topMib": "Top MIB",
+    "pricingPerTr": "AD/3 months",
+    "forSmallBusiness": "For small businesses",
+    "forBigCompanies": "For medium and large companies"
 }

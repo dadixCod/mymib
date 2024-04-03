@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class Constants {
   final Size? deviseSize;
   Constants({
-     this.deviseSize,
+    this.deviseSize,
   });
 
   double get tenVertical => deviseSize!.height * 0.013;
@@ -49,32 +49,47 @@ class Constants {
     "● Discount propositions in various domains via promo codes with trusted partners",
     "● Free physical personalized budget notebook offered after 3 months of subscription",
   ];
+  List<String> basicCompany = [
+    "●	Numérisez vos tickets de caisse, factures et autres documents afin de permettre une identification et une catégorisation automatiques de vos transactions.",
+    "●	Optimisez votre temps et simplifiez la gestion de vos finances.",
+    "●	Accédez à des rapports détaillés et à des graphiques pour visualiser vos dépenses et suivre votre progression.",
+    "●	Configurez des alertes de dépenses pour rester informé et contrôler votre budget.",
+    "●	Suivez vos objectifs financiers et facilitez l'atteinte de vos aspirations.",
+  ];
+  List<String> basicCompanyArabic = [
+    "● قم بمسح تذاكر الشراء والفواتير والمستندات الأخرى لتمكين التعرف التلقائي والتصنيف التلقائي لمعاملاتك.",
+    "● قم بتحسين وقتك وبسط إدارة أمورك المالية.",
+    "● احصل على تقارير مفصلة ورسوم بيانية لتصور مصاريفك وتتبع تقدمك.",
+    "● قم بتكوين تنبيهات للمصاريف لتظل على اطلاع والسيطرة على ميزانيتك.",
+    "● تتبع أهدافك المالية وتسهل تحقيق طموحاتك.",
+  ];
+  List<String> basicCompanyEnglish = [
+    "● Scan your purchase receipts, invoices, and other documents to enable automatic identification and categorization of your transactions.",
+    "● Optimize your time and simplify the management of your finances.",
+    "● Access detailed reports and graphs to visualize your expenses and track your progress.",
+    "● Set expense alerts to stay informed and control your budget.",
+    "● Track your financial goals and facilitate the achievement of your aspirations.",
+  ];
   List<String> solutionCompanyOptionTexts = [
-    "●	Tous les avantages de l'option Basique",
-    "●	Propositions de collaboration pour attirer plus de clients"
+    "●	Inclus tous les avantages de l'option Basique",
+    "●	Collaboration pour attirer davantage de clients et augmenter vos revenus"
   ];
   List<String> solutionCompanyOptionTextsArabic = [
-    "● جميع مزايا الخيار الأساسي",
-    "● اقتراحات للتعاون لجذب المزيد من العملاء",
+    "● تشمل جميع مزايا الخيار الأساسي",
+    "● التعاون لجذب المزيد من العملاء وزيادة عائداتك",
   ];
   List<String> solutionCompanyOptionTextsEnglish = [
-    "● All the benefits of the Basic option",
-    "● Collaboration proposals to attract more clients",
+    "● Includes all the benefits of the Basic option",
+    "● Collaboration to attract more clients and increase your revenue",
   ];
 
   List<String> topMibTexts = [
-    '●	Accessible après 2 mois d\'abonnement "Solution"',
-    "●	Tous les avantages de l'option La Solution",
-    "●	Promotion de l'entreprise auprès d'un large public de clients"
+    "●	Les avantages sont disponibles sur demande via nos représentants commerciaux."
   ];
   List<String> topMibTextsArabic = [
-    '● يمكن الوصول إليه بعد 2 أشهر من الاشتراك في "الحل"',
-    "● جميع مزايا الخيار 'الحل'",
-    "● ترويج الشركة لجمهور واسع من العملاء",
+    "● الفوائد متاحة حسب الطلب من خلال ممثلينا التجاريين.",
   ];
   List<String> topMibTextsEnglish = [
-    '● Accessible after 2 months of subscription to "Solution"',
-    "● All the benefits of the 'Solution' option",
-    "● Company promotion to a wide audience of clients",
+    "● Benefits are available upon request through our sales representatives.",
   ];
 }

@@ -63,11 +63,12 @@
     "amountInDa": "المبلغ (دج)",
     "note": "ملاحظة",
     "contact": "جهات الاتصال",
-    "basicOptionOne": "الخيار الأساسي 1",
-    "solutionOptionTwo": "الخيار 2 الحل",
-    "basicOption": "الخيار الأساسي ",
-    "solutionOption": "الخيار الحل",
+    "basicOption": "الأساسي",
+    "solutionOption": "الحل",
     "pricing": "د.ج/شهر",
     "headlineBasic": "قل وداعًا للإدخال اليدوي وقم بتحسين أوضاعك المالية!",
-    "topMib": "أفضل MIB"
+    "topMib": "أفضل MIB",
+    "pricingPerTr": "د.ج/3 أشهر",
+    "forSmallBusiness": "للأعمال الصغيرة",
+    "forBigCompanies": "للشركات المتوسطة والكبيرة"
 }

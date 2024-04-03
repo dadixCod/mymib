@@ -27,9 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("أضف معاملات جديدة"),
         "addTransaction": MessageLookupByLibrary.simpleMessage("أضف معاملة"),
         "amountInDa": MessageLookupByLibrary.simpleMessage("المبلغ (دج)"),
-        "basicOption": MessageLookupByLibrary.simpleMessage("الخيار الأساسي "),
-        "basicOptionOne":
-            MessageLookupByLibrary.simpleMessage("الخيار الأساسي 1"),
+        "basicOption": MessageLookupByLibrary.simpleMessage("الأساسي"),
         "callUs": MessageLookupByLibrary.simpleMessage("اتصل بنا"),
         "category": MessageLookupByLibrary.simpleMessage("الفئة"),
         "company": MessageLookupByLibrary.simpleMessage("شركة"),
@@ -57,6 +55,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "emptyCategory": MessageLookupByLibrary.simpleMessage("الفئة فارغة"),
         "emptyEmail": MessageLookupByLibrary.simpleMessage(
             "يجب ألا يكون البريد الإلكتروني فارغًا"),
+        "forBigCompanies":
+            MessageLookupByLibrary.simpleMessage("للشركات المتوسطة والكبيرة"),
+        "forSmallBusiness":
+            MessageLookupByLibrary.simpleMessage("للأعمال الصغيرة"),
         "getStarted": MessageLookupByLibrary.simpleMessage("ابدأ"),
         "headlineBasic": MessageLookupByLibrary.simpleMessage(
             "قل وداعًا للإدخال اليدوي وقم بتحسين أوضاعك المالية!"),
@@ -87,6 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium": MessageLookupByLibrary.simpleMessage("مميز"),
         "prev": MessageLookupByLibrary.simpleMessage("السابق"),
         "pricing": MessageLookupByLibrary.simpleMessage("د.ج/شهر"),
+        "pricingPerTr": MessageLookupByLibrary.simpleMessage("د.ج/3 أشهر"),
         "profile": MessageLookupByLibrary.simpleMessage("الملف الشخصي"),
         "restartApp": MessageLookupByLibrary.simpleMessage(
             "أعد تشغيل التطبيق لتطبيق جميع التغييرات"),
@@ -96,9 +99,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "signup": MessageLookupByLibrary.simpleMessage("التسجيل"),
         "signupDesc":
             MessageLookupByLibrary.simpleMessage("نحن سعداء بوجودك معنا"),
-        "solutionOption": MessageLookupByLibrary.simpleMessage("الخيار الحل"),
-        "solutionOptionTwo":
-            MessageLookupByLibrary.simpleMessage("الخيار 2 الحل"),
+        "solutionOption": MessageLookupByLibrary.simpleMessage("الحل"),
         "stats": MessageLookupByLibrary.simpleMessage("الإحصائيات"),
         "title": MessageLookupByLibrary.simpleMessage("My MIB"),
         "topMib": MessageLookupByLibrary.simpleMessage("أفضل MIB"),

@@ -94,7 +94,7 @@ class OfferCard extends StatelessWidget {
             bottom: 10,
             right: 10,
             child: Container(
-              width: deviseSize.width * 0.35,
+              width: deviseSize.width * 0.4,
               height: constants.tenVertical * 4,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),

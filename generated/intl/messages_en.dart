@@ -28,9 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "addTransaction":
             MessageLookupByLibrary.simpleMessage("Add a Transaction"),
         "amountInDa": MessageLookupByLibrary.simpleMessage("Amount (AD)"),
-        "basicOption": MessageLookupByLibrary.simpleMessage("Basic Option"),
-        "basicOptionOne":
-            MessageLookupByLibrary.simpleMessage("Basic Option 1"),
+        "basicOption": MessageLookupByLibrary.simpleMessage("Basic"),
         "callUs": MessageLookupByLibrary.simpleMessage("Call us "),
         "category": MessageLookupByLibrary.simpleMessage("Category"),
         "company": MessageLookupByLibrary.simpleMessage("Company"),
@@ -61,6 +59,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Category is empty"),
         "emptyEmail":
             MessageLookupByLibrary.simpleMessage("Email should not be null"),
+        "forBigCompanies": MessageLookupByLibrary.simpleMessage(
+            "For medium and large companies"),
+        "forSmallBusiness":
+            MessageLookupByLibrary.simpleMessage("For small businesses"),
         "getStarted": MessageLookupByLibrary.simpleMessage("Get Started"),
         "headlineBasic": MessageLookupByLibrary.simpleMessage(
             "Say goodbye to manual entry and optimize your finances!"),
@@ -91,6 +93,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "premium": MessageLookupByLibrary.simpleMessage("Premium"),
         "prev": MessageLookupByLibrary.simpleMessage("Previous"),
         "pricing": MessageLookupByLibrary.simpleMessage("AD/month"),
+        "pricingPerTr": MessageLookupByLibrary.simpleMessage("AD/3 months"),
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "restartApp": MessageLookupByLibrary.simpleMessage(
             "Relaunch the application for all changes to take effect"),
@@ -100,10 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "signup": MessageLookupByLibrary.simpleMessage("Sign up"),
         "signupDesc": MessageLookupByLibrary.simpleMessage(
             "We are glad to have you on board"),
-        "solutionOption":
-            MessageLookupByLibrary.simpleMessage("Solution Option"),
-        "solutionOptionTwo":
-            MessageLookupByLibrary.simpleMessage("Solution Option 2"),
+        "solutionOption": MessageLookupByLibrary.simpleMessage("The Solution"),
         "stats": MessageLookupByLibrary.simpleMessage("Statistics"),
         "title": MessageLookupByLibrary.simpleMessage("My MIB"),
         "topMib": MessageLookupByLibrary.simpleMessage("Top MIB"),

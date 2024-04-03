@@ -26,15 +26,15 @@ class _CompanyPremiumState extends State<CompanyPremium> {
     String? savedLanguage = prefs.getString('selectedLanguage');
     if (savedLanguage != null) {
       if (savedLanguage == 'ar') {
-        basicOptionsOne = constants.basiqueOptionTextsArabic;
+        basicOptionsOne = constants.basicCompanyArabic;
         solutionOptionsTwo = constants.solutionCompanyOptionTextsArabic;
         topMibTexts = constants.topMibTextsArabic;
       } else if (savedLanguage == 'fr') {
-        basicOptionsOne = constants.basiqueOptionTexts;
+        basicOptionsOne = constants.basicCompany;
         solutionOptionsTwo = constants.solutionCompanyOptionTexts;
         topMibTexts = constants.topMibTexts;
       } else if (savedLanguage == 'en') {
-        basicOptionsOne = constants.basiqueOptionTextsEnglish;
+        basicOptionsOne = constants.basicCompanyEnglish;
         solutionOptionsTwo = constants.solutionCompanyOptionTextsEnglish;
         topMibTexts = constants.topMibTextsEnglish;
       }
@@ -71,23 +71,25 @@ class _CompanyPremiumState extends State<CompanyPremium> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   OfferCard(
-                    headline: autoTexts.headlineBasic,
+                    headline: autoTexts.forSmallBusiness,
                     optionTitle: autoTexts.basicOption,
-                    price: '550 ${autoTexts.pricing}',
+                    price: '2800 ${autoTexts.pricingPerTr}',
                     list: basicOptionsOne,
                   ),
                   SizedBox(height: constants.tenVertical * 3),
                   OfferCard(
+                    headline: autoTexts.forSmallBusiness,
                     optionTitle: autoTexts.solutionOption,
-                    price: '1400 ${autoTexts.pricing}',
-                    height: deviseSize.height * 0.2,
-                    listHight: deviseSize.height * 0.15,
+                    price: '4900 ${autoTexts.pricingPerTr}',
+                    height: deviseSize.height * 0.28,
+                    listHight: deviseSize.height * 0.18,
                     list: solutionOptionsTwo,
                   ),
                   SizedBox(height: constants.tenVertical * 3),
                   OfferCard(
+                    headline: autoTexts.forBigCompanies,
                     optionTitle: autoTexts.topMib,
-                    price: '2900 ${autoTexts.pricing}',
+                    price: '8900 ${autoTexts.pricingPerTr}',
                     height: deviseSize.height * 0.3,
                     listHight: deviseSize.height * 0.2,
                     list: topMibTexts,
