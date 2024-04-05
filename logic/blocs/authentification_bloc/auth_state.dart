@@ -19,6 +19,12 @@ class AuthSuccessState extends AuthState {
   @override
   List<Object> get props => [];
 }
+class AuthSuccessLoginState extends AuthState {
+  final User? user;
+  const AuthSuccessLoginState(this.user);
+  @override
+  List<Object> get props => [];
+}
 class AuthSuccessSignUpState extends AuthState {
   final User user;
   const AuthSuccessSignUpState(this.user);
@@ -38,3 +44,7 @@ class AuthFailureState extends AuthState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+class GoogleUserExist extends AuthState{}
+class GoogleUserNotExist extends AuthState{}
+

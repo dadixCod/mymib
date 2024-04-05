@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:intl/intl.dart';
 import 'package:mymib/core/utils/extensions.dart';
 import 'package:mymib/generated/l10n.dart';
 import 'package:mymib/logic/blocs/date_bloc.dart/bloc/date_bloc.dart';
@@ -51,42 +54,31 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           ),
         ),
         actions: [
-          Row(
-            children: [
-              selectedDate == null
-                  ? const SizedBox()
-                  : Text(
-                      DateFormat.Md().format(selectedDate!),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-              IconButton(
-                onPressed: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    firstDate: DateTime(2020),
-                    lastDate: DateTime.now().add(
-                      const Duration(days: 3650),
-                    ),
-                    initialDate: DateTime.now(),
-                  );
-                  if (date != null) {
-                    setState(() {
-                      selected = {};
-                      selectedDate = date;
-                      context.read<DateBloc>().add(SelectOneDate(date: date));
-                    });
-                  }
-                  return;
-                },
-                icon: const Icon(
-                  Icons.calendar_month,
+          IconButton(
+            onPressed: () async {
+              final dateRange = await showDateRangePicker(
+                context: context,
+                firstDate: DateTime(2020),
+                lastDate: DateTime.now().add(
+                  const Duration(days: 3650),
                 ),
-              ),
-            ],
-          )
+                initialDateRange: DateTimeRange(
+                  start: DateTime.now().subtract(const Duration(days: 30)),
+                  end: DateTime.now(),
+                ),
+              );
+              log(dateRange.toString());
+              if (dateRange != null) {
+                context.read<DateBloc>().add(SelectDateRange(
+                    startDate: dateRange.start, endDate: dateRange.end));
+                setState(() {
+                  selected = {};
+                });
+              }
+              return;
+            },
+            icon: const Icon(Icons.date_range),
+          ),
         ],
       ),
       body: BlocConsumer<UserBloc, UserState>(
@@ -143,24 +135,26 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           onSelectionChanged: (newSelection) {
                             setState(() {
                               selected = newSelection;
-                              if (newSelection.first == '1') {
-                                context.read<DateBloc>().add(SelectDateRange(
-                                      startDate: DateTime.now()
-                                          .subtract(const Duration(days: 7)),
-                                      endDate: DateTime.now(),
-                                    ));
-                              } else if (newSelection.first == '2') {
-                                context.read<DateBloc>().add(SelectDateRange(
-                                      startDate: DateTime.now()
-                                          .subtract(const Duration(days: 30)),
-                                      endDate: DateTime.now(),
-                                    ));
-                              } else if (newSelection.first == '3') {
-                                context.read<DateBloc>().add(SelectDateRange(
-                                      startDate: DateTime.now()
-                                          .subtract(const Duration(days: 365)),
-                                      endDate: DateTime.now(),
-                                    ));
+                              if (newSelection.isNotEmpty) {
+                                if (newSelection.first == '1') {
+                                  context.read<DateBloc>().add(SelectDateRange(
+                                        startDate: DateTime.now()
+                                            .subtract(const Duration(days: 7)),
+                                        endDate: DateTime.now(),
+                                      ));
+                                } else if (newSelection.first == '2') {
+                                  context.read<DateBloc>().add(SelectDateRange(
+                                        startDate: DateTime.now()
+                                            .subtract(const Duration(days: 30)),
+                                        endDate: DateTime.now(),
+                                      ));
+                                } else if (newSelection.first == '3') {
+                                  context.read<DateBloc>().add(SelectDateRange(
+                                        startDate: DateTime.now().subtract(
+                                            const Duration(days: 365)),
+                                        endDate: DateTime.now(),
+                                      ));
+                                }
                               }
                               selectedDate = null;
                             });

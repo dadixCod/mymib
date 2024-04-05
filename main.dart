@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mymib/core/router/app_router.dart';
-import 'package:mymib/core/utils/extensions.dart';
 import 'package:mymib/logic/blocs/categories_bloc.dart/bloc/category_bloc.dart';
 import 'package:mymib/logic/blocs/date_bloc.dart/bloc/date_bloc.dart';
 import 'package:mymib/logic/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:mymib/logic/blocs/statistics_bloc/statistics_bloc.dart';
 import 'package:mymib/logic/blocs/transactions_bloc/transactions_bloc.dart';
 import 'package:mymib/logic/blocs/user_bloc/user_bloc.dart';
+import 'package:mymib/presentation/screens/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_bloc.dart';
-import '../../presentation/screens/screens.dart';
 import 'core/theme/app_theme.dart';
 import 'generated/l10n.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -90,32 +88,7 @@ class MainApp extends StatelessWidget {
           colorScheme: darkColorScheme,
           fontFamily: 'Roboto',
         ),
-        home: Scaffold(
-          body: FutureBuilder(
-            future: SharedPreferences.getInstance(),
-            builder: (context, AsyncSnapshot<SharedPreferences> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: SpinKitFadingCircle(
-                    color: context.colorScheme.primary,
-                  ),
-                );
-              }
-
-              final SharedPreferences prefs = snapshot.data!;
-              final int? onboardingCompleted =
-                  prefs.getInt('onboardingCompleted');
-
-              //check onboarding state
-              if (onboardingCompleted != null && onboardingCompleted == 1) {
-                // Onboarding already completed
-                return const AuthenticationScreen();
-              } else {
-                return const OnBoardingScreen();
-              }
-            },
-          ),
-        ),
+        home: const SplashScreen(),
         onGenerateRoute: appRouter.onGenerateRoute,
       ),
     );

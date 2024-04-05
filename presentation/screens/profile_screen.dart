@@ -26,12 +26,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String selectedLanguage = 'fr';
   bool isChangedLanguage = false;
   void setLanguage() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    String? savedLanguage = _prefs.getString('selectedLanguage');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedLanguage = prefs.getString('selectedLanguage');
     if (savedLanguage != null) {
       selectedLanguage = savedLanguage;
     } else {
-      selectedLanguage = '';
+      selectedLanguage = 'fr';
     }
   }
 
@@ -202,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     color: context.colorScheme.error,
                                   ),
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                         ],
                       ),
                     ),

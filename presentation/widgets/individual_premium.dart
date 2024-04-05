@@ -26,17 +26,19 @@ class _IndividualPremiumState extends State<IndividualPremium> {
     if (savedLanguage != null) {
       if (savedLanguage == 'ar') {
         basicOptionsOne = constants.basiqueOptionTextsArabic;
-        solutionOptionsTwo = constants.solutionCompanyOptionTextsArabic;
+        solutionOptionsTwo = constants.solutionOptionTextsArabic;
       } else if (savedLanguage == 'fr') {
         basicOptionsOne = constants.basiqueOptionTexts;
-        solutionOptionsTwo = constants.solutionCompanyOptionTexts;
+        solutionOptionsTwo = constants.solutionOptionTexts;
       } else if (savedLanguage == 'en') {
         basicOptionsOne = constants.basiqueOptionTextsEnglish;
-        solutionOptionsTwo = constants.solutionCompanyOptionTextsEnglish;
+        solutionOptionsTwo = constants.solutionOptionTextsEnglish;
       }
       return savedLanguage;
     } else {
       savedLanguage = 'fr';
+      basicOptionsOne = constants.basiqueOptionTexts;
+      solutionOptionsTwo = constants.solutionOptionTexts;
       return savedLanguage;
     }
   }
@@ -76,7 +78,7 @@ class _IndividualPremiumState extends State<IndividualPremium> {
                   OfferCard(
                     optionTitle: autoTexts.solutionOption,
                     price: '990 ${autoTexts.pricing}',
-                    height: deviseSize.height * 0.35,
+                    height: deviseSize.height * 0.38,
                     listHight: deviseSize.height * 0.3,
                     list: solutionOptionsTwo,
                   ),

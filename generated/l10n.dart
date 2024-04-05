@@ -370,30 +370,30 @@ class S {
     );
   }
 
-  /// `Weekly`
+  /// `Week`
   String get weekly {
     return Intl.message(
-      'Weekly',
+      'Week',
       name: 'weekly',
       desc: '',
       args: [],
     );
   }
 
-  /// `Monthly`
+  /// `Month`
   String get monthly {
     return Intl.message(
-      'Monthly',
+      'Month',
       name: 'monthly',
       desc: '',
       args: [],
     );
   }
 
-  /// `Yearly`
+  /// `Year`
   String get yearly {
     return Intl.message(
-      'Yearly',
+      'Year',
       name: 'yearly',
       desc: '',
       args: [],

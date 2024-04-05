@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_event.dart';
 import 'package:mymib/logic/blocs/authentification_bloc/auth_state.dart';
 import 'package:mymib/logic/services/authentication_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthenticationService authService = AuthenticationService();
@@ -36,6 +37,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         try {
           final userStored = await authService.storeUserToFirestore(event.type);
           if (userStored) {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setBool('isLoggedIn', true);
             emit(const AuthSuccessState());
           }
           emit(const AuthLoadingState(isLoading: true));
@@ -57,7 +60,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             event.password,
           );
           if (user != null) {
-            emit(const AuthSuccessState());
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setBool('isLoggedIn', true);
+            emit(AuthSuccessLoginState(user));
+          } else {
+            emit(const AuthFailureState('Email or password are wrong'));
           }
           emit(const AuthLoadingState(isLoading: false));
         } on FirebaseException catch (e) {
@@ -75,9 +82,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         try {
           final bool userExists = await authService.signInWithGoogle();
           if (userExists) {
-            emit(const AuthSuccessState());
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setBool('isLoggedIn', true);
+            emit(GoogleUserExist());
           } else {
-            emit(const AuthFailureState("User not found"));
+            emit(GoogleUserNotExist());
           }
           emit(const AuthLoadingState(isLoading: false));
         } on FirebaseAuthException catch (e) {
@@ -94,6 +103,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(const AuthLoadingState(isLoading: true));
         try {
           await authService.signOutUser();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setBool('isLoggedIn', false);
           emit(const AuthSuccessSignOutState());
         } catch (e) {
           emit(AuthFailureState(e.toString()));

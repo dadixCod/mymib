@@ -114,50 +114,53 @@ class StatisticsView extends StatelessWidget {
                 final category = sortedCategories[index];
                 final amountSorted = sortedAmounts[index];
                 final categoryFraction = amountSorted / amount;
-                return Container(
-                  height: deviseSize.height * 0.07,
-                  width: deviseSize.width,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  color: context.colorScheme.onBackground.withOpacity(0.1),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: deviseSize.height * 0.035,
-                        width: deviseSize.width * 0.15,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: getColorForCategory(
-                              categoryFraction, isExpensesList),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "${(((amountSorted / amount) * 100).round())}%",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: context.colorScheme.background,
+                return amountSorted == 0
+                    ? const SizedBox()
+                    : Container(
+                        height: deviseSize.height * 0.07,
+                        width: deviseSize.width,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        color:
+                            context.colorScheme.onBackground.withOpacity(0.1),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: deviseSize.height * 0.035,
+                              width: deviseSize.width * 0.15,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                color: getColorForCategory(
+                                    categoryFraction, isExpensesList),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "${(((categoryFraction) * 100).round())}%",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: context.colorScheme.background,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            SizedBox(width: deviseSize.width * 0.02),
+                            Expanded(
+                              child: Text(
+                                category,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '$amountSorted ${autoTexts.currency}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          ],
                         ),
-                      ),
-                      SizedBox(width: deviseSize.width * 0.02),
-                      Expanded(
-                        child: Text(
-                          category,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '${categories.values.elementAt(index)} ${autoTexts.currency}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    ],
-                  ),
-                );
+                      );
               }),
         ),
       ],

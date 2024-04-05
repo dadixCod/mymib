@@ -76,7 +76,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalidUsername": MessageLookupByLibrary.simpleMessage(
             "Must be atleast 6 characters long"),
         "login": MessageLookupByLibrary.simpleMessage("Log in"),
-        "monthly": MessageLookupByLibrary.simpleMessage("Monthly"),
+        "monthly": MessageLookupByLibrary.simpleMessage("Month"),
         "next": MessageLookupByLibrary.simpleMessage("Next"),
         "no": MessageLookupByLibrary.simpleMessage("No"),
         "noTransactions": MessageLookupByLibrary.simpleMessage(
@@ -112,9 +112,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Fill in at least one of the amounts"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
         "username": MessageLookupByLibrary.simpleMessage("Username"),
-        "weekly": MessageLookupByLibrary.simpleMessage("Weekly"),
+        "weekly": MessageLookupByLibrary.simpleMessage("Week"),
         "welcomeAgain": MessageLookupByLibrary.simpleMessage("Welcome again"),
-        "yearly": MessageLookupByLibrary.simpleMessage("Yearly"),
+        "yearly": MessageLookupByLibrary.simpleMessage("Year"),
         "yes": MessageLookupByLibrary.simpleMessage("Yes"),
         "youAre": MessageLookupByLibrary.simpleMessage("You are ?"),
         "your_categories":

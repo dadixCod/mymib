@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _initialize();
     context.read<UserBloc>().add(LoadUser());
 
-    context.read<TransactionsBloc>().add(LoadFilteredTransactions(
-        DateTime.now(), FirebaseAuth.instance.currentUser!.uid));
+    context.read<TransactionsBloc>().add(LoadTransactions(
+         FirebaseAuth.instance.currentUser!.uid));
     context.read<CategoryBloc>().add(GetCategories());
 
     super.initState();
@@ -81,30 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final dateRange = await showDateRangePicker(
-                context: context,
-                firstDate: DateTime(2020),
-                lastDate: DateTime.now().add(
-                  const Duration(days: 3650),
-                ),
-                initialDateRange: DateTimeRange(
-                  start: DateTime.now().subtract(const Duration(days: 30)),
-                  end: DateTime.now(),
-                ),
-              );
-              log(dateRange.toString());
-              if (dateRange != null) {
-                context.read<DateBloc>().add(SelectDateRange(
-                    startDate: dateRange.start, endDate: dateRange.end));
-              }
-              return;
-            },
-            icon: const Icon(Icons.date_range),
-          ),
-        ],
+        
         leadingWidth: 100,
         leading: SizedBox(
           child: Row(
@@ -290,8 +266,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               } else {
-                context.read<TransactionsBloc>().add(LoadFilteredTransactions(
-                    DateTime.now(), FirebaseAuth.instance.currentUser!.uid));
+                context.read<TransactionsBloc>().add(LoadTransactions(
+                     FirebaseAuth.instance.currentUser!.uid));
                 return Container();
               }
             },

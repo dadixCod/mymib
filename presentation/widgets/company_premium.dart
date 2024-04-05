@@ -41,6 +41,9 @@ class _CompanyPremiumState extends State<CompanyPremium> {
       return savedLanguage;
     } else {
       savedLanguage = 'fr';
+      basicOptionsOne = constants.basicCompany;
+        solutionOptionsTwo = constants.solutionCompanyOptionTexts;
+        topMibTexts = constants.topMibTexts;
       return savedLanguage;
     }
   }

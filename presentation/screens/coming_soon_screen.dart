@@ -1,63 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mymib/core/utils/extensions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ComingSoonScreen extends StatelessWidget {
+class ComingSoonScreen extends StatefulWidget {
   const ComingSoonScreen({super.key});
 
   @override
+  State<ComingSoonScreen> createState() => _ComingSoonScreenState();
+}
+
+class _ComingSoonScreenState extends State<ComingSoonScreen> {
+  Future<String> getLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final language = prefs.getString('selectedLanguage');
+    if (language != null) {
+      if (language == 'fr') {
+        return 'fr';
+      } else {
+        return 'en';
+      }
+    } else {
+      return 'fr';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final deviseSize = context.deviceSize;
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: TweenAnimationBuilder(
-          tween: Tween<double>(begin: 0, end: 1),
-          duration: const Duration(milliseconds: 500),
-          builder: (context, value, child) {
-            return Opacity(
-              opacity: value,
-              child: Container(
-                height: deviseSize.height * 0.2,
-                width: deviseSize.width,
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: context.colorScheme.primaryContainer,
-                  boxShadow: [
-                    BoxShadow(
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      color: context.colorScheme.primary.withOpacity(0.6),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/icons/premium.png',
-                        color: context.colorScheme.primary,
-                        height: 40,
-                        width: 40,
+        child: FutureBuilder<String>(
+            future: getLanguage(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SpinKitFadingCircle(
+                  color: context.colorScheme.primary,
+                );
+              }
+              return TweenAnimationBuilder(
+                tween: Tween<double>(begin: 0, end: 1),
+                duration: const Duration(milliseconds: 500),
+                builder: (context, value, child) {
+                  return Opacity(
+                    opacity: value,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      SizedBox(width: deviseSize.width * 0.07),
-                      Text(
-                        'Bientot disponible',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: context.colorScheme.primary,
+                      child: Center(
+                        child: Image.asset(
+                          snapshot.data == 'en'
+                              ? 'assets/images/comingsoon.png'
+                              : 'assets/images/bientodispo.png',
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            }),
       ),
     );
   }

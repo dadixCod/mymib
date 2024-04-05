@@ -86,7 +86,10 @@ class TransactionCard extends StatelessWidget {
         },
         child: Container(
           width: deviseSize.width * 0.9,
-          height: constants.tenVertical * 8.5,
+          height:
+              transaction.expenseAmount != 0 && transaction.revenueAmount != 0
+                  ? constants.tenVertical * 12.5
+                  : constants.tenVertical * 8.5,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -119,21 +122,23 @@ class TransactionCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10.0, vertical: 8),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            transaction.revenueCategory,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
                           Text(
                             "${transaction.revenueAmount.toString()} ${autoTexts.currency}",
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: Colors.blue,
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Text(
+                            "${transaction.expenseAmount.toString()} ${autoTexts.currency}",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: context.colorScheme.primary,
                             ),
                           ),
                         ],
@@ -150,23 +155,75 @@ class TransactionCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            transaction.expenseCategory,
+                            transaction.revenueAmount != 0 &&
+                                    transaction.expenseAmount == 0
+                                ? transaction.revenueCategory
+                                : transaction.expenseAmount != 0 &&
+                                        transaction.revenueAmount == 0
+                                    ? transaction.expenseCategory
+                                    : transaction.revenueCategory,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
-                            "${transaction.expenseAmount.toString()} ${autoTexts.currency}",
+                            transaction.revenueAmount != 0 &&
+                                    transaction.expenseAmount == 0
+                                ? "${transaction.revenueAmount.toString()} ${autoTexts.currency}"
+                                : transaction.expenseAmount != 0 &&
+                                        transaction.revenueAmount == 0
+                                    ? "${transaction.expenseAmount.toString()} ${autoTexts.currency}"
+                                    : "${transaction.revenueAmount.toString()} ${autoTexts.currency}",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color: context.colorScheme.primary,
+                              color: transaction.revenueAmount != 0 &&
+                                      transaction.expenseAmount == 0
+                                  ? Colors.blue
+                                  : transaction.expenseAmount != 0 &&
+                                          transaction.revenueAmount == 0
+                                      ? context.colorScheme.primary
+                                      : Colors.blue,
                             ),
                           ),
                         ],
                       ),
                     ),
+                    transaction.expenseAmount != 0 &&
+                            transaction.revenueAmount != 0
+                        ? Divider(
+                            height: 1,
+                            color: context.colorScheme.outline.withOpacity(0.2),
+                          )
+                        : const SizedBox(),
+                    transaction.expenseAmount != 0 &&
+                            transaction.revenueAmount != 0
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  transaction.expenseCategory,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  "${transaction.expenseAmount.toString()} ${autoTexts.currency}",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: context.colorScheme.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox(),
                   ],
                 ),
               )

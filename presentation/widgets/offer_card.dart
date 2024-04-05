@@ -51,15 +51,24 @@ class OfferCard extends StatelessWidget {
                         ),
                       )
                     : const SizedBox(),
-                Container(
+                SizedBox(
                   height: listHight ?? deviseSize.height * 0.34,
-                  child: ListView.builder(
+                  child: ListView.separated(
                     shrinkWrap: true,
                     itemCount: list.length,
                     itemBuilder: (context, index) {
                       return Text(
                         list[index],
                         style: context.textTheme.bodyLarge,
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Divider(
+                          height: 1,
+                          color: context.colorScheme.outline.withOpacity(0.3),
+                        ),
                       );
                     },
                   ),

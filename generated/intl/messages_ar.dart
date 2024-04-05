@@ -72,7 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalidUsername": MessageLookupByLibrary.simpleMessage(
             "يجب أن يكون على الأقل 6 أحرف"),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
-        "monthly": MessageLookupByLibrary.simpleMessage("شهري"),
+        "monthly": MessageLookupByLibrary.simpleMessage("شهر"),
         "next": MessageLookupByLibrary.simpleMessage("التالي"),
         "no": MessageLookupByLibrary.simpleMessage("لا"),
         "noTransactions": MessageLookupByLibrary.simpleMessage(
@@ -108,9 +108,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "يرجى ملء واحد على الأقل من المبالغ"),
         "type": MessageLookupByLibrary.simpleMessage("النوع"),
         "username": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
-        "weekly": MessageLookupByLibrary.simpleMessage("أسبوعي"),
+        "weekly": MessageLookupByLibrary.simpleMessage("أسبوع"),
         "welcomeAgain": MessageLookupByLibrary.simpleMessage("مرحبًا مرة أخرى"),
-        "yearly": MessageLookupByLibrary.simpleMessage("سنوي"),
+        "yearly": MessageLookupByLibrary.simpleMessage("سنة"),
         "yes": MessageLookupByLibrary.simpleMessage("نعم"),
         "youAre": MessageLookupByLibrary.simpleMessage("أنت ؟"),
         "your_categories": MessageLookupByLibrary.simpleMessage("فئاتك")

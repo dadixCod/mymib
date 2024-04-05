@@ -107,7 +107,7 @@ class _LoginScreeState extends State<LoginScreen> {
                     //Log in button
                     BlocConsumer<AuthBloc, AuthState>(
                       listener: (context, state) {
-                        if (state is AuthSuccessState) {
+                        if (state is AuthSuccessLoginState) {
                           Navigator.of(context)
                               .pushReplacementNamed('/main_screen');
                         }
@@ -183,10 +183,10 @@ class _LoginScreeState extends State<LoginScreen> {
                     SizedBox(height: constants.tenVertical),
                     BlocConsumer<AuthBloc, AuthState>(
                       listener: (context, state) {
-                        if (state is AuthSuccessState) {
+                        if (state is GoogleUserExist) {
                           Navigator.of(context)
                               .pushReplacementNamed('/main_screen');
-                        } else if (state is AuthFailureState) {
+                        } else if (state is GoogleUserNotExist) {
                           Navigator.of(context)
                               .pushReplacementNamed('/person_type');
                         }

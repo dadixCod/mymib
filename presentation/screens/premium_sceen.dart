@@ -18,6 +18,7 @@ class PremiumScreen extends StatefulWidget {
 
 class _PremiumScreenState extends State<PremiumScreen> {
   var type = '';
+   
   @override
   void initState() {
     context.read<UserBloc>().add(LoadUser());
