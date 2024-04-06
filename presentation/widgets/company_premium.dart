@@ -42,8 +42,8 @@ class _CompanyPremiumState extends State<CompanyPremium> {
     } else {
       savedLanguage = 'fr';
       basicOptionsOne = constants.basicCompany;
-        solutionOptionsTwo = constants.solutionCompanyOptionTexts;
-        topMibTexts = constants.topMibTexts;
+      solutionOptionsTwo = constants.solutionCompanyOptionTexts;
+      topMibTexts = constants.topMibTexts;
       return savedLanguage;
     }
   }
@@ -121,7 +121,7 @@ class _CompanyPremiumState extends State<CompanyPremium> {
                   SizedBox(height: constants.tenVertical * 1),
                   ContactContainer(
                     onTap: () async {
-                      await EasyLauncher.call(number: '0655741903');
+                      await EasyLauncher.call(number: '0555802426');
                     },
                     icon: Icon(
                       Icons.phone,

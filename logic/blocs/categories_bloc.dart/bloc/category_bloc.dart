@@ -30,14 +30,14 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<InitializeDefaultCategories>(
       (event, emit) async {
         List<Category> defaultRevenues = [
-          Category(category: 'Freelance'),
-          Category(category: 'Salaire'),
-          Category(category: 'Autre'),
+          const Category(category: 'Freelance'),
+          const Category(category: 'Salaire'),
+          const Category(category: 'Autre'),
         ];
         List<Category> defaultExpenses = [
-          Category(category: 'Transport'),
-          Category(category: 'Santé'),
-          Category(category: 'Autre'),
+          const Category(category: 'Transport'),
+          const Category(category: 'Santé'),
+          const Category(category: 'Autre'),
         ];
         for (var category in defaultRevenues) {
           await categoriesService.insertAutoData(

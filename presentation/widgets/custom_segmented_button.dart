@@ -9,15 +9,15 @@ class CustomSegmentedButton extends StatefulWidget {
   final void Function(int)? onSelectionChanged;
 
   const CustomSegmentedButton({
-    Key? key,
+    super.key,
     required this.items,
     this.containerWidth = 100.0,
     this.selectedIndex, // Initialize selectedIndex
     this.onSelectionChanged,
-  }) : super(key: key);
+  });
 
   @override
-  _CustomSegmentedButtonState createState() => _CustomSegmentedButtonState();
+  State<CustomSegmentedButton> createState() => _CustomSegmentedButtonState();
 }
 
 class _CustomSegmentedButtonState extends State<CustomSegmentedButton> {

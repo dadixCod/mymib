@@ -76,7 +76,9 @@ class TransactionsBloc extends Bloc<TransactionEvent, TransactionState> {
           final transactions = await fetchAndFilterRangeTransactions(
               event.startDate, event.endDate, event.userId);
           emit(TransactionsLoaded(transactions));
-        } catch (e) {}
+        } catch (e) {
+          emit(TransactionFailure('No transactions found'));
+        }
       },
     );
     on<LoadFilteredTransactions>(
@@ -86,7 +88,9 @@ class TransactionsBloc extends Bloc<TransactionEvent, TransactionState> {
           final transactions =
               await fetchAndFilterTransactions(event.date, event.userId);
           emit(TransactionsLoaded(transactions));
-        } catch (e) {}
+        } catch (e) {
+          emit(TransactionFailure('No transactions found'));
+        }
       },
     );
     on<LoadTransactions>(

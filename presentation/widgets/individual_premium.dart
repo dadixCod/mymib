@@ -106,7 +106,7 @@ class _IndividualPremiumState extends State<IndividualPremium> {
                   SizedBox(height: constants.tenVertical * 1),
                   ContactContainer(
                     onTap: () async {
-                      await EasyLauncher.call(number: '0655741903');
+                      await EasyLauncher.call(number: '0555802426');
                     },
                     icon: Icon(
                       Icons.phone,
